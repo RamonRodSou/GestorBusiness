@@ -1,4 +1,3 @@
-// @domain/admin.ts
 import { User, UserSummary } from "@domain/user";
 import { EMPTY } from "@utils/string-utils";
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +9,8 @@ export class Admin extends User {
         public phone: string = EMPTY,
         public email: string = EMPTY,
         public password: string = EMPTY,
-        public address: string = EMPTY
+        public address: string = EMPTY,
+        public readonly permissions: string[] = []
     ) {
         super(id, name, phone, email, password, address);
     }
@@ -22,7 +22,8 @@ export class Admin extends User {
             json.phone,
             json.email,
             json.password,
-            json.address
+            json.address,
+            json.permissions || []
         );
     }
 
@@ -33,8 +34,13 @@ export class Admin extends User {
             changes.phone ?? this.phone,
             changes.email ?? this.email,
             changes.password ?? this.password,
-            changes.address ?? this.address
+            changes.address ?? this.address,
+            changes.permissions ?? this.permissions
         );
+    }
+
+    hasPermission(permission: string): boolean {
+        return this.permissions.includes(permission);
     }
 }
 
