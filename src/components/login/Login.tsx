@@ -29,7 +29,7 @@ export default function Login() {
     return (
         <Box className='box'>
             <form className='form' onSubmit={handleLogin}>
-                <h2 className='text-2xl font-bold mb-4 text-center'>Login</h2>
+                <h2 className='title'>Login</h2>
                 <TextField 
                     type='email'
                     placeholder='E-mail'
