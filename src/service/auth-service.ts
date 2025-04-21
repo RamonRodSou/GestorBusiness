@@ -1,4 +1,3 @@
-// @service/auth-service.ts
 import { auth } from "@service/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { AdminSummary } from "@domain/admin";
@@ -24,7 +23,6 @@ export class AuthService {
         } catch (error: any) {
             console.error("Erro detalhado:", error);
             
-            // Mensagens de erro mais amigáveis
             let errorMessage = "Falha no login";
             switch (error.code) {
                 case "auth/invalid-email":
