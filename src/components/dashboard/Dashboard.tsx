@@ -1,11 +1,9 @@
+import "./dashboard.scss";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import "./dashboard.scss";
-
 import { Admin } from "@domain/admin";
 import {
     AppBar,
-    Divider,
     Drawer,
     IconButton,
     List,
@@ -14,21 +12,22 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Typography,
-    useMediaQuery,
-    useTheme,
+    Typography
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { menuItems } from "./Menu";
+import { AuthContext } from "@context/AuthContext";
+import { ManagerContext } from "@context/ManagerContext";
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const location = useLocation();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    const admin = location.state?.admin as Admin;
+    const currentUser = useContext(AuthContext);
     const { userId } = useParams();
+    const { isMobile } = useContext(ManagerContext);
 
+    const admin = location.state?.admin as Admin;
+    
     const [mobileOpen, setMobileOpen] = useState(false);
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -39,11 +38,10 @@ export default function Dashboard() {
     
     const isActive = (path: string) => location.pathname === `/dashboard/${userId}/${path}`;
     const mobileMarginTop = isMobile ? 64 : 0;
-
+    
     const drawerContent = (
         <div className="menu-content">
-            <Divider sx={{ backgroundColor: "rgba(255,255,255,0.3)", mb: 2 }}/>
-            <List>
+            <List> 
                 {menuItems.map((item) => (
                     <ListItem key={item.path} disablePadding>
                         <ListItemButton
@@ -57,17 +55,17 @@ export default function Dashboard() {
                     </ListItem>
                 ))}
             </List>
-            <div className="user-info" style={{ marginTop: "auto", padding: "1rem" }}>
-                <Typography variant="body2">{admin?.name || "Usuário"}</Typography>
+            <div className="data">
+                <Typography variant="body2">{currentUser?.email || "Usuário"}</Typography>
                 <Typography variant="caption">
-                    {admin?.email || "email@exemplo.com"}
+                    {currentUser?.email || "email@exemplo.com"}
                 </Typography>
             </div>
         </div>
     );
 
     return (
-        <div className="dashboard-container" style={{ display: "flex" }}>
+        <div className="dashboard-container">
             {isMobile && (
                 <AppBar position="fixed" sx={{ zIndex: 1201 }}>
                     <Toolbar>
@@ -95,8 +93,8 @@ export default function Dashboard() {
                 sx={{
                     "& .MuiDrawer-paper": {
                         width: 240,
-                        backgroundColor: "#1976d2",
-                        color: "white",
+                        backgroundColor:'var(--primary-background)',
+                        color: 'var(--primary-color)',
                         boxSizing: "border-box",
                         },
                     }}
