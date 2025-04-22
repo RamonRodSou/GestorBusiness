@@ -18,7 +18,7 @@ export default function Login() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const userId = userCredential.user.uid;            
-            navigate(`/dashboard/${userId}`);
+            navigate(`/dashboard/${userId}/home`);
         } catch (err: any) {
             setError("E-mail ou senha inválidos");
             alert('Usuario Invalido')
