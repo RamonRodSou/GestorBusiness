@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: center;
+
+    .form {
+        width: 100%;
+    }
+
+    @media (min-width: 600px) {
+        .form {
+            padding: 2rem;
+        }
+    }
+}
