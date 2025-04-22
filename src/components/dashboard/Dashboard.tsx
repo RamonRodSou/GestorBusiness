@@ -37,10 +37,10 @@ export default function Dashboard() {
     }
     
     const isActive = (path: string) => location.pathname === `/dashboard/${userId}/${path}`;
-    const mobileMarginTop = isMobile ? 64 : 0;
+    const mobileMarginTop = isMobile ? 55 : 0;
     
     const drawerContent = (
-        <div className="menu-content">
+        <div className="dashboard-menu-content">
             <List> 
                 {menuItems.map((item) => (
                     <ListItem key={item.path} disablePadding>
@@ -55,8 +55,8 @@ export default function Dashboard() {
                     </ListItem>
                 ))}
             </List>
-            <div className="data">
-                <Typography variant="body2">{currentUser?.email || "Usuário"}</Typography>
+            <div className="dashboard-data">
+                <Typography variant="body2">Usuário</Typography>
                 <Typography variant="caption">
                     {currentUser?.email || "email@exemplo.com"}
                 </Typography>

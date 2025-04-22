@@ -18,14 +18,14 @@
     }
 }
 
-.menu-content {
+.dashboard-menu-content {
     margin-top: 4.5rem;
     display: flex;
     position: fixed;
     flex-direction: column;
     height: calc(100% - 4.5rem);
 
-    .data {
+    .dashboard-data {
         margin-top: auto;
         padding: 1rem;
     }
