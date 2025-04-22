@@ -15,7 +15,8 @@
       "@assets/*": ["src/assets/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
-      "@service/*": ["src/service/*"]
+      "@service/*": ["src/service/*"],
+      "@context/*": ["src/context/*"],
     },
 
     "moduleResolution": "bundler",
