@@ -5,16 +5,23 @@ import React, { createContext, useEffect, useState } from "react"
 interface managerContextType {
     data: string | number;
     setData: React.Dispatch<React.SetStateAction<string>>;
+
     isMobile: boolean;
     setIsMobile: React.Dispatch<React.SetStateAction<boolean>>;
 
+    searchTerm: string;
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ManagerContext = createContext<managerContextType>({
     data: EMPTY,
     setData: () => { },
+
     isMobile: false,
     setIsMobile: () => { },
+
+    searchTerm: EMPTY,
+    setSearchTerm: () => { },
 })
 
 export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,6 +29,7 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const matches = useMediaQuery(theme.breakpoints.down("sm"));
     const [data, setData] = useState<string>(EMPTY);
     const [isMobile, setIsMobile] = useState<boolean>(matches);
+    const [searchTerm, setSearchTerm] = useState<string>(EMPTY);
 
     useEffect(() => {
         setIsMobile(matches);
@@ -29,7 +37,7 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     return (
         <ManagerContext.Provider value={{
-                data, setData, isMobile, setIsMobile
+                data, setData, isMobile, setIsMobile, searchTerm, setSearchTerm
             }}
         >
             {children}
