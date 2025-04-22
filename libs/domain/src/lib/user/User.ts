@@ -7,16 +7,12 @@ export abstract class User {
       public name: string = EMPTY,
       public phone: string = EMPTY,
       public email: string = EMPTY,
-      public password: string = EMPTY,
-      public address: string = EMPTY
     ) { }
 }
 
-
-export abstract class UserSummary {
+export class UserSummary {
   constructor(
       public readonly id: string = uuidv4(),
       public email: string = EMPTY,
-      public password: string = EMPTY,
     ) { }
 }
