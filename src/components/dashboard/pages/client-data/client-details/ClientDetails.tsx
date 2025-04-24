@@ -1,21 +1,23 @@
 import './client-details.scss';
 import { useState } from "react";
 import { Box, Button, Container, TextField } from "@mui/material";
-import { Client } from "@domain/user/Client";
+import { Client } from "@domain/user/client/Client";
 import { clientAdd } from '@service/UserService';
 import BackButton from '@components/back-button/BackButton';
 
 export default function ClientDetails() {
     const [client, setClient] = useState<Client>(new Client());
 
-    const handleChange = (field: keyof Client, value: any) => {
-        setClient((prev) => ({ ...prev, [field]: value }));
+    const handleChange = (field: keyof Client, value: string | number) => {
+        setClient(prev => {
+            const updated = { ...prev, [field]: value };
+            return Client.fromJson(updated);
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newClient = { ...client, createdAt: new Date() };
-        await clientAdd(newClient);
+        await clientAdd(client);
         setClient(new Client());
     };
 

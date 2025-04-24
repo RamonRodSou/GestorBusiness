@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, useEffect, useState } from 'react';
-import { Client } from '@domain/user/Client';
+import { Client } from '@domain/user/client/Client';
 import { findAllClients } from '@service/UserService';
 import { ManagerContext } from '@context/ManagerContext';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -21,11 +21,11 @@ export default function ClientData() {
     const { isMobile } = useContext(ManagerContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(() => { 
         findAllClients()
-            .then((res) => {
-                setData(res);
-                setFiltered(res);
+            .then((it) => {
+                setData(it);
+                setFiltered(it);
             })
             .catch(console.error);
     }, []);
@@ -53,8 +53,6 @@ export default function ClientData() {
                                 <Typography className='data-text'>{it?.zipCode}</Typography>
                             </>
                         )}
-
-                        <Typography className='data-text'>{it?.status}</Typography>
                     </Box>
                 ))
             ) : (
@@ -65,7 +63,7 @@ export default function ClientData() {
 
             <Tooltip className='data-button' title="Click to new client">
                 <IconButton onClick={() => newClient()}>
-                <Add />
+                    <Add/>
                 </IconButton>
             </Tooltip>
         </Container>

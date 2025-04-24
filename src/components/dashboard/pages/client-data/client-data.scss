@@ -1,51 +1,53 @@
-.data-container {
-    display: flex;
-    flex-direction: column;
-
-    .data-list {
+:root {
+    .data-container {
         display: flex;
-        justify-content: start;
-        align-items: center;
-        flex-direction: row;
-        gap: .5rem;
-        border-radius: 6px;
-        border:none;
-        box-shadow: 2px 2px 5px #857e7e;
-        padding: .5rem;
-        
-        .data-text {
-            font-size: 1.2rem;
-            color: var(--primary-title);
-        }
-    }
-    
-    @media (min-width: 600px) {
-        .data-list {
-            padding: .2rem;
-            margin: .2rem;
-            border-radius: 6px;
-            flex-wrap: wrap;
-            .data-text { 
-                color: var(--primary-title);
-                font-size: 1.2rem;
-            }
-    }
-    }   
+        flex-direction: column;
 
-    .data-button {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        margin: 1rem;
-        padding: .7rem;
-        background-color: var(--primary-background);
-        color: var(--primary-color);
-    
-        &:hover {
-            background-color: var(--primary-hover);
+        .data-list {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            flex-direction: row;
+            gap: .5rem;
+            border-radius: 6px;
+            border:none;
+            box-shadow: 2px 2px 5px #857e7e;
+            padding: .5rem;
+            
+            .data-text {
+                font-size: 1.2rem;
+                color: var(--primary-title);
+            }
         }
-        &:active {
-            background-color: var(--primary-active);
+        
+        @media (min-width: 600px) {
+            .data-list {
+                padding: .2rem;
+                margin: .2rem;
+                border-radius: 6px;
+                flex-wrap: wrap;
+                .data-text { 
+                    color: var(--primary-title);
+                    font-size: 1.2rem;
+                }
+            }
+        }   
+
+        .data-button {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin: 1rem;
+            padding: .7rem;
+            background-color: var(--primary-background);
+            color: var(--primary-color);
+        
+            &:hover {
+                background-color: var(--primary-hover);
+            }
+            &:active {
+                background-color: var(--primary-active);
+            }
         }
     }
 }

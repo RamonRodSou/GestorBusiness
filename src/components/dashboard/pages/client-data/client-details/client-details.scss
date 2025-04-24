@@ -1,16 +1,18 @@
-.details-container {
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    margin: 0 auto;
+:root {
+    .details-container {
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        margin: 0 auto;
 
-    .details-form {
-        width: 100%;
-    }
-
-    @media (min-width: 600px) {
         .details-form {
-            padding: 2rem;
+            width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .details-form {
+                padding: 1rem;
+            }
         }
     }
 }
