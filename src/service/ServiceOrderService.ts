@@ -28,7 +28,16 @@ export async function findAllServiceOrders(): Promise<ServiceOrder[]> {
         if (!user) throw new Error("Usuário não autenticado.");
 
         const snapshot = await getDocs(collection(db, 'serviceOrders'));
-        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as ServiceOrder));
+        return snapshot.docs.map((doc) => {
+            const data = doc.data();
+        
+            if (!data.status) throw new Error("Ordem de serviço sem status");
+    
+            return {
+                id: doc.id,
+                ...data,
+            } as ServiceOrder;
+        })
     } catch (error) {
         alert('Erro ao listar ordens de serviço: ' + error);
         throw error;

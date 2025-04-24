@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EMPTY } from '@utils/string-utils';
 import { Client, CollaboratorSummary } from '@domain/user';
 import { Financial } from '@domain/financial';
-import { StatusOrder } from './Status-order';
+import { StatusOrder } from './Status-Order';
 
 export class ServiceOrder {
     public readonly id: string;
