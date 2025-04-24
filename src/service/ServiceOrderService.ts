@@ -1,4 +1,4 @@
-import { ServiceOrder } from "@domain/service-order/Service-order";
+import { ServiceOrder } from "@domain/service-order/Service-Order";
 import { auth, db } from "./firebase";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 
