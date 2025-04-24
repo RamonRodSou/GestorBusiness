@@ -1,3 +1,4 @@
+import { useFinancial } from '@context/FinancialContext';
 import './card-data.scss'
 import { Client } from "@domain/user/client/Client";
 import { Box, Paper, Typography } from "@mui/material";
@@ -6,11 +7,9 @@ import { useEffect, useState } from "react";
 
 export default function CardData() {
     const [data, setData] = useState<Client[]>([]);
+    const { currentCash, monthInflow, monthOutflow } = useFinancial();
 
     const totalClients = data.length;
-    const currentCash = 5240.75;
-    const monthInflow = 2300.00;
-    const monthOutflow = 900.00;
 
     useEffect(() => {
         findAllClients()

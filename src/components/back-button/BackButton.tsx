@@ -5,10 +5,10 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type props = {
-    isToHome?: boolean
+    path?:  string;
 }
 
-export default function BackButton({isToHome = true}: props) {
+export default function BackButton({path}: props) {
     const { userId } = useParams();
     const location = useLocation();
     const admin = location.state?.admin as Admin;
@@ -19,9 +19,7 @@ export default function BackButton({isToHome = true}: props) {
     }
 
     const backOrNavigate = () => {
-        isToHome
-            ? nav('home')
-            : nav('clients');
+        nav( path ?? 'home')
     }
 
     return (

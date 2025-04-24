@@ -23,7 +23,7 @@ export default function ClientDetails() {
 
     return (
         <>
-            <BackButton isToHome={false}/>
+            <BackButton path={'clients'}/>
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
                     <h2>Novo Cliente</h2>
