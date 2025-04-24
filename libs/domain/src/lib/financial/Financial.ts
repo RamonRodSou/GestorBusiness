@@ -1,10 +1,12 @@
-import { EMPTY } from '@utils/string-utils';
+import { ServiceOrder } from '@domain/service-order';
+import { CollaboratorSummary } from '@domain/user';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Financial {
     constructor(
         public readonly id: string = uuidv4(),
-        public serviceOrderId: string = EMPTY,
+        public serviceOrder: ServiceOrder = new ServiceOrder(),
+        public collaborator: CollaboratorSummary = new CollaboratorSummary(),
         public income: number = 0,
         public expense: number = 0,
         public createdAt: string = new Date().toISOString()
@@ -17,7 +19,8 @@ export class Financial {
     static fromJson(json: any): Financial {
         return new Financial(
             json.id,
-            json.serviceOrderId,
+            ServiceOrder.fromJson(json.serviceOrder),
+            CollaboratorSummary.fromJson(json.collaborator),
             json.income,
             json.expense,
             json.createdAt
@@ -27,7 +30,8 @@ export class Financial {
     toJSON(): object {
         return {
             id: this.id,
-            serviceOrderId: this.serviceOrderId,
+            serviceOrder: this.serviceOrder,
+            collaborator: this.collaborator,
             income: this.income,
             expense: this.expense,
             createdAt: this.createdAt,

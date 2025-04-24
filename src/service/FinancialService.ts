@@ -8,7 +8,8 @@ export async function financialAdd(financial: Financial) {
         if (!user) throw new Error("Usuário não autenticado.");
         await addDoc(collection(db, 'financials'), {
             userId: user.uid,
-            serviceOrderId: financial.serviceOrderId,
+            serviceOrder: financial.serviceOrder,
+            collaborator: financial.collaborator,
             income: financial.income,
             expense: financial.expense,
             createdAt: financial.createdAt,

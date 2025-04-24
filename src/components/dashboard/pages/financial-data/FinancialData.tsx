@@ -23,7 +23,7 @@ export default function FinancialData() {
     function newFinancial() {
         return navigate(`/dashboard/${userId}/add-financial`);
     }
-
+ 
     useEffect(() => {
         async function load() {
           const data = await findAllFinancials();
@@ -58,7 +58,7 @@ export default function FinancialData() {
                         <Typography variant="subtitle2" className='title-secondary'>
                             Ordem de Serviço
                         </Typography>
-                        <Typography variant="body1" className='title-secondary'>{item.serviceOrderId}</Typography>
+                        <Typography variant="body1" className='title-secondary'>{item.serviceOrder?.orderNumber}</Typography>
 
                         <Divider sx={{ my: 1 }} />
 
@@ -67,7 +67,7 @@ export default function FinancialData() {
                         <Typography variant="body2" fontWeight="bold">
                             Saldo: R$ {(item.income - item.expense).toFixed(2)}
                         </Typography>
-
+                        <Typography variant="body2">Colaborador: {item.collaborator?.name}</Typography>
                         <Typography variant="caption" display="block" mt={1}>
                             Criado em: {new Date(item.createdAt).toLocaleDateString()}
                         </Typography>

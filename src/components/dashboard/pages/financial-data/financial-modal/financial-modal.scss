@@ -1,0 +1,33 @@
+.dialog-box {
+    .dialog-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .input-field {
+        input {
+            padding: 0.8rem;
+        }
+    }
+
+    .dialog-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+
+        .btn-cancel {
+            color: #666;
+        }
+
+        .btn-confirm {
+            background-color: #1976d2;
+            color: #fff;
+
+            &:hover {
+                background-color: #1565c0;
+            }
+        }
+    }
+}

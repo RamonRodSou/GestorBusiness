@@ -22,7 +22,7 @@ export default function FinancialDetails() {
 
     return (
         <>
-            <BackButton isToHome={false} />
+            <BackButton path={'financial'} />
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
                     <h2>Nova Movimentação</h2>
