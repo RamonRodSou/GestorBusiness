@@ -1,7 +1,7 @@
 import './back-button.scss'
 import { Admin } from '@domain/user';
 import { ArrowBack } from "@mui/icons-material";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type props = {

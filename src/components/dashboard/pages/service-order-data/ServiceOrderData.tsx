@@ -6,7 +6,6 @@ import { ServiceOrder } from '@domain/service-order/Service-order';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StatusOrder } from '@domain/service-order/Status-order';
 import { Add, Print } from '@mui/icons-material';
-import { EMPTY } from '@utils/string-utils';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);

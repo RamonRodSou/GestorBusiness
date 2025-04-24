@@ -79,7 +79,7 @@ export default function ServiceOrderDetails() {
                             options={collaborators}
                             getOptionLabel={(option) => option.name}
                             value={selectedCollaborator}
-                            onChange={(e, newValue) => setSelectedCollaborator(newValue)}
+                            onChange={(_, newValue) => setSelectedCollaborator(newValue)}
                             renderInput={(params) => (
                                 <TextField {...params} label="Colaborador" required />
                             )}
@@ -91,7 +91,7 @@ export default function ServiceOrderDetails() {
                             options={clients}
                             getOptionLabel={(option) => option.name}
                             value={selectedClient}
-                            onChange={(e, newValue) => setSelectedClient(newValue)}
+                            onChange={(_, newValue) => setSelectedClient(newValue)}
                             renderInput={(params) => (
                                 <TextField {...params} label="Cliente" required />
                             )}

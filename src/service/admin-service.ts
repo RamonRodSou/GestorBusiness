@@ -1,4 +1,4 @@
-import { Admin } from "@domain/admin";
+import { Admin } from "@domain/user";
 import { db } from "@service/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
