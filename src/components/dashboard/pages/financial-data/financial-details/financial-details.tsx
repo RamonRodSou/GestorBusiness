@@ -26,16 +26,6 @@ export default function FinancialDetails() {
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
                     <h2>Nova Movimentação</h2>
-
-                    <Box mb={2}>
-                        <TextField
-                            label="Ordem de Serviço"
-                            value={financial.serviceOrderId}
-                            onChange={(e) => handleChange("serviceOrderId", e.target.value)}
-                            fullWidth
-                            required
-                        />
-                    </Box>
                     <Box mb={2}>
                         <TextField
                             label="Entrada (R$)"

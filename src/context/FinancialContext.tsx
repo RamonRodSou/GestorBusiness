@@ -15,7 +15,6 @@ export function FinancialProvider({ children }: { children: React.ReactNode }) {
     const [monthOutflow, setMonthOutflow] = useState(0);
   
     const setFinancialData = ({
-        currentCash,
         monthInflow,
         monthOutflow
     }: {

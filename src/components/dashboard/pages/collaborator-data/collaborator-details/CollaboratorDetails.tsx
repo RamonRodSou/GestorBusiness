@@ -22,7 +22,7 @@ export default function CollaboratorDetails() {
 
     return (
         <>
-            <BackButton isToHome={false}/>
+            <BackButton path={'collaborator'}/>
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
                     <h2>Novo Colaborador</h2>
