@@ -5,6 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@utils/*": ["libs/utils/*"],
       "@domain/*": ["libs/domain/src/lib/*"],
