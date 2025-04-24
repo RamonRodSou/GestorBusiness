@@ -1,4 +1,4 @@
-import { Client } from "@domain/user/Client";
+import { Client } from "@domain/user/client/Client";
 import firebase from "firebase/compat/app"
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "./firebase";
@@ -7,7 +7,6 @@ export async function clientAdd(client: Client) {
     try {
         const user = auth.currentUser;
         if (!user) throw new Error("Usuário não autenticado.");
-        const createdAt = new Date().toISOString()
         await addDoc(collection(db, 'clients'), {
             userId: user.uid,
             name: client.name,
@@ -19,7 +18,7 @@ export async function clientAdd(client: Client) {
             state: client.state,
             zipCode: client.zipCode,
             country: client.country,
-            createdAt: createdAt,
+            createdAt: client.createdAt,
         });
         alert('Cliente registrado com sucesso!');
     } catch (error) {
