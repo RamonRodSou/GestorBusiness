@@ -1,4 +1,22 @@
 .dialog-box {
+    .dialog-header {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+
+        padding: 1rem 1.2rem 0;
+
+        .dialog-title {
+            font-size: 2rem;
+            color: var(--primary-title);
+        }
+
+        .title-number {
+            color: var(--secondary-title);
+        }
+    }
+
     .dialog-content {
         display: flex;
         flex-direction: column;
