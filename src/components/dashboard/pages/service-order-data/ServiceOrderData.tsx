@@ -27,7 +27,7 @@ export default function ServiceOrderData() {
             const orders = await findAllServiceOrders();
             setServiceOrders(
                 selectedStatus
-                    ? orders.filter(order => order.status === selectedStatus)
+                    ? orders.filter(order => order?.status === selectedStatus)
                     : orders
             );
         }

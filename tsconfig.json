@@ -3,6 +3,16 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "paths": {
+    "@utils/*": ["libs/utils/*"],
+    "@domain/*": ["libs/domain/src/lib/*"],
+    "@components/*": ["src/components/*"],
+    "@assets/*": ["src/assets/*"],
+    "@hooks/*": ["src/hooks/*"],
+    "@pages/*": ["src/pages/*"],
+    "@service/*": ["src/service/*"],
+    "@context/*": ["src/context/*"],
+  },
 }
  

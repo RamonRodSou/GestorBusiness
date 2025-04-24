@@ -1,2 +1,2 @@
-export * from './Service-Order';
 export * from './Status-Order';
+export * from './Service-Order';

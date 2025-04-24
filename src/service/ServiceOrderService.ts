@@ -1,4 +1,4 @@
-import { ServiceOrder } from "@domain/service-order/Service-Order";
+import { ServiceOrder } from "@domain/service-order";
 import { auth, db } from "./firebase";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 
@@ -28,16 +28,10 @@ export async function findAllServiceOrders(): Promise<ServiceOrder[]> {
         if (!user) throw new Error("Usuário não autenticado.");
 
         const snapshot = await getDocs(collection(db, 'serviceOrders'));
-        return snapshot.docs.map((doc) => {
-            const data = doc.data();
+        return snapshot.docs.map((doc) =>
+            ServiceOrder.fromJson({ id: doc.id, ...doc.data() })
+        );
         
-            if (!data.status) throw new Error("Ordem de serviço sem status");
-    
-            return {
-                id: doc.id,
-                ...data,
-            } as ServiceOrder;
-        })
     } catch (error) {
         alert('Erro ao listar ordens de serviço: ' + error);
         throw error;
