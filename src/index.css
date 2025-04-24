@@ -8,6 +8,8 @@
     --secondary-title: rgb(0, 58, 120);
     --secondary-active: #006c1d;
 
+    --cancel-color: rgb(199, 94, 18);
+
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 
     color-scheme: light dark;
