@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Autocomplete, TextField, Box, Button, Container } from "@mui/material";
-import { ServiceOrder } from "@domain/service-order/Service-order";
 import { serviceOrderAdd, findAllServiceOrders } from "@service/ServiceOrderService";
 import BackButton from "@components/back-button/BackButton";
 import { Client, CollaboratorSummary } from "@domain/user";
@@ -8,7 +7,7 @@ import { findAllClients } from "@service/UserService";
 import { EMPTY } from "@utils/string-utils";
 import { Financial } from "@domain/financial";
 import { findAllCollaborators } from "@service/CollaboratorService";
-import { StatusOrder } from "@domain/service-order/Status-order";
+import { ServiceOrder, StatusOrder } from "@domain/service-order";
 
 export default function ServiceOrderDetails() {
     const [clients, setClients] = useState<Client[]>([]);

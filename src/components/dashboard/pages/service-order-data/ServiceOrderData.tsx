@@ -2,10 +2,9 @@ import './service-order-data.scss'
 import { useEffect, useState } from 'react';
 import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton } from '@mui/material';
 import { findAllServiceOrders, updateServiceOrder } from '@service/ServiceOrderService';
-import { ServiceOrder } from '@domain/service-order/Service-order';
 import { useNavigate, useParams } from 'react-router-dom';
-import { StatusOrder } from '@domain/service-order/Status-order';
 import { Add, Print } from '@mui/icons-material';
+import { StatusOrder, ServiceOrder } from '@domain/service-order';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
@@ -51,15 +50,15 @@ export default function ServiceOrderData() {
             </Box>
 
             <Box className='order-status'>
-                {Object.values(StatusOrder).map((statusObj) => {
-                    const { label, color } = StatusOrder.getStatusColorAndLabel(statusObj.status);
+                {Object.values(StatusOrder).map((it) => {
+                    const { label, color } = StatusOrder.getStatusColorAndLabel(it?.status);
                     return (
                         <Typography
-                            key={statusObj.status}
+                            key={it?.status}
                             variant="body1"
-                            className={`status-title ${selectedStatus === statusObj.status ? 'active' : ''}`}
-                            onClick={() => setSelectedStatus(statusObj.status)}
-                            style={{ color: selectedStatus === statusObj.status ? color : undefined }}
+                            className={`status-title ${selectedStatus === it?.status ? 'active' : ''}`}
+                            onClick={() => setSelectedStatus(it?.status)}
+                            style={{ color: selectedStatus === it?.status ? color : undefined }}
                         >
                             {label}
                         </Typography>
