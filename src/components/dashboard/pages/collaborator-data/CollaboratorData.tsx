@@ -1,8 +1,14 @@
 import { Add } from "@mui/icons-material";
 import {
-  Box,
   Container,
   IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -36,12 +42,24 @@ export default function CollaboratorData() {
             <Search<Collaborator> data={data} onFilter={setFiltered} />
 
             {filtered?.length > 0 ? (
-                filtered.map((it) => (
-                    <Box className='data-list' key={it.id}>
-                        <Typography className='data-text'>{it?.name}</Typography>
-                        <Typography className='data-text'>{it?.phone}</Typography>
-                    </Box>
-                ))
+                    <TableContainer component={Paper}>
+                    <Table size="small">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell className='title-secondary'>Nome</TableCell>
+                            <TableCell className='title-secondary'>Telefone</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {filtered.map((it) => (
+                            <TableRow key={it.id}>
+                            <TableCell className='data-text'>{it.name}</TableCell>
+                            <TableCell className='data-text'>{it.phone}</TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </TableContainer>
             ) : (
                 <Typography variant="body1" sx={{ color: 'var(--primary-title)' }}>
                     Nenhum colaborador encontrado.
