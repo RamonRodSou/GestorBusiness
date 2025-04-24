@@ -3,36 +3,6 @@
         display: flex;
         flex-direction: column;
 
-        .data-list {
-            display: flex;
-            justify-content: start;
-            align-items: center;
-            flex-direction: row;
-            gap: .5rem;
-            border-radius: 6px;
-            border:none;
-            box-shadow: 2px 2px 5px #857e7e;
-            padding: .5rem;
-            
-            .data-text {
-                font-size: 1.2rem;
-                color: var(--primary-title);
-            }
-        }
-        
-        @media (min-width: 600px) {
-            .data-list {
-                padding: .2rem;
-                margin: .2rem;
-                border-radius: 6px;
-                flex-wrap: wrap;
-                .data-text { 
-                    color: var(--primary-title);
-                    font-size: 1.2rem;
-                }
-            }
-        }   
-
         .data-button {
             position: fixed;
             bottom: 0;
