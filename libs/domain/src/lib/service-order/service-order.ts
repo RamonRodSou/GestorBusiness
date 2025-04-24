@@ -1,27 +1,56 @@
 import { v4 as uuidv4 } from 'uuid';
 import { EMPTY } from '@utils/string-utils';
+import { Client, CollaboratorSummary } from '@domain/user';
+import { Financial } from '@domain/financial';
+import { StatusOrder } from './Status-order';
 
 export class ServiceOrder {
-  public readonly id: string;
-  public readonly orderNumber: string;
+    public readonly id: string;
+    public readonly orderNumber: number;
+    public serviceValue: number = 0;
 
-  constructor(
-    public description: string = EMPTY,
-    public createdAt: Date = new Date(),
-    public status: 'pending' | 'in_progress' | 'completed' = 'pending'
-  ) {
-    this.id = uuidv4();
-    this.orderNumber = this.generateOrderNumber();
-  }
+    constructor(
+        public description: string = EMPTY,
+        public client: Client = new Client(),
+        public collaborator: CollaboratorSummary = new CollaboratorSummary(),
+        public financial: Financial = new Financial(), 
+        public status: string = StatusOrder.PENDING.status,
+        orderNumber: number = 1,
+        serviceValue: number = 0,
+        public createdAt: string = new Date().toISOString()
+    ) {
+        this.id = uuidv4();
+        this.orderNumber = orderNumber;
+        this.serviceValue = serviceValue;
+    }
 
-  private generateOrderNumber(): string {
-    const timestamp = this.createdAt.getTime().toString().slice(-5); // e.g. last 5 digits of timestamp
-    const prefix = 'SO'; // Service Order
-    const uuidPart = this.id.split('-')[0].toUpperCase(); // partial UUID
-    return `${prefix}-${timestamp}-${uuidPart}`;
-  }
+    static fromJson(json: any): ServiceOrder {
+        const order = new ServiceOrder(
+            json.description,
+            Client.fromJson(json.Client),
+            CollaboratorSummary.fromJson(json.collaborator),
+            Financial.fromJson(json.financial),
+            json.status.label,
+            json.orderNumber || 1,
+            json.serviceValue || 0,
+            json.createdAt,
+        );
 
-  updateStatus(newStatus: 'pending' | 'in_progress' | 'completed') {
-    this.status = newStatus;
-  }
+        (order as any).id = json.id;
+        return order;
+    }
+
+    toJSON(): object {
+        return {
+            id: this.id,
+            orderNumber: this.orderNumber,
+            description: this.description,
+            client: this.client,
+            collaborator: this.collaborator,
+            financial: this.financial ?? null,
+            status: this.status,
+            serviceValue: this.serviceValue,
+            createdAt: this.createdAt,
+        };
+    }
 }

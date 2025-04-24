@@ -1,0 +1,99 @@
+:root {
+    .order-header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .order-status {
+        display: flex;
+        margin-top: 1rem;
+        justify-content: space-around;
+        gap: 1rem;
+
+        .status-title {
+            color: var(--secondary-title);
+            font-size: .9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;  
+            cursor: pointer;          
+        }
+    }
+
+    .container-order {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        margin-top: 1.5rem;
+        gap: 1rem;
+
+        .paper-order {
+            padding: 1rem;
+            width: 100%;
+    
+            .status-order {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+
+        .order-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding: .3rem;
+            border: .5px solid rgba(190, 186, 186, 0.235);
+            border-radius: 10px;
+            
+            .button {
+                padding: .7rem;
+                background-color: var(--primary-background);
+                color: var(--primary-color);
+            
+                &:hover {
+                    background-color: var(--primary-hover);
+                }
+                &:active {
+                    background-color: var(--primary-active);
+                }
+            }
+        }
+    }
+    @media(min-width: 600px) {
+
+        .order-status {
+            .status-title {
+                font-size: 1.5rem;    
+            }
+        }
+    }
+
+    @media(min-width: 800px) {
+        .order-header {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .container-order {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            .paper-order {
+                width: 45%;
+            }
+        }
+    }
+
+    @media(min-width: 1200px) {
+        .container-order {
+            .paper-order {
+                width: 30%;
+            }
+        }
+    }
+}
