@@ -6,7 +6,7 @@ import { AuthService } from '@service/auth-service';
 import Home from '@components/dashboard/pages/home/Home';
 import Preferences from '@components/dashboard/pages/preferences/Preferences';
 import ClientDetails from '@components/dashboard/pages/client-data/client-details/ClientDetails';
-import ClientData from '@components/dashboard/pages/client-data/Client-data';
+import ClientData from '@components/dashboard/pages/client-data/ClientData';
 import FinancialData from '@components/dashboard/pages/financial-data/FinancialData';
 import FinancialDetails from '@components/dashboard/pages/financial-data/financial-details/financial-details';
 import ServiceOrderData from '@components/dashboard/pages/service-order-data/ServiceOrderData';

@@ -1,5 +1,5 @@
 import "./dashboard.scss";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { Logout, Menu as MenuIcon } from "@mui/icons-material";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     AppBar,
@@ -11,6 +11,7 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
+    Tooltip,
     Typography
 } from "@mui/material";
 import { useContext, useState } from "react";
@@ -35,6 +36,10 @@ export default function Dashboard() {
         navigate(`/dashboard/${userId}/${path}`, { state: { admin } });
         if (isMobile) setMobileOpen(false);
     }
+
+    function logout() {
+        navigate(`/login}`);
+    }
     
     const isActive = (path: string) => location.pathname === `/dashboard/${userId}/${path}`;
     const mobileMarginTop = isMobile ? 55 : 0;
@@ -56,7 +61,11 @@ export default function Dashboard() {
                 ))}
             </List>
             <div className="dashboard-data">
-                <Typography variant="body2">Usuário</Typography>
+                <Tooltip className="data-button" title="Click to logout">
+                    <IconButton onClick={logout}>
+                        <Logout/>
+                    </IconButton>
+                </Tooltip>
                 <Typography variant="caption">
                     {currentUser?.email || "email@exemplo.com"}
                 </Typography>
