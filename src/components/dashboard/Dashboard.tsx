@@ -1,7 +1,6 @@
 import "./dashboard.scss";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Admin } from "@domain/admin";
 import {
     AppBar,
     Drawer,
@@ -18,6 +17,7 @@ import { useContext, useState } from "react";
 import { menuItems } from "./Menu";
 import { AuthContext } from "@context/AuthContext";
 import { ManagerContext } from "@context/ManagerContext";
+import { Admin } from "@domain/user";
 
 export default function Dashboard() {
     const navigate = useNavigate();
