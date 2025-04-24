@@ -15,7 +15,6 @@ export async function serviceOrderAdd(order: ServiceOrder) {
             createdAt: order.createdAt,
             status: order.status
         });
-        alert('Ordem de serviço registrada com sucesso!');
     } catch (error) {
         alert('Erro ao registrar ordem de serviço: ' + error);
         throw error;
@@ -28,10 +27,7 @@ export async function findAllServiceOrders(): Promise<ServiceOrder[]> {
         if (!user) throw new Error("Usuário não autenticado.");
 
         const snapshot = await getDocs(collection(db, 'serviceOrders'));
-        return snapshot.docs.map((doc) =>
-            ServiceOrder.fromJson({ id: doc.id, ...doc.data() })
-        );
-        
+        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as ServiceOrder));
     } catch (error) {
         alert('Erro ao listar ordens de serviço: ' + error);
         throw error;
@@ -56,7 +52,6 @@ export async function updateServiceOrder(id: string, data: Partial<ServiceOrder>
     try {
         const ref = doc(db, 'serviceOrders', id);
         await updateDoc(ref, data);
-        alert('Ordem de serviço atualizada com sucesso!');
     } catch (error) {
         alert('Erro ao atualizar ordem de serviço: ' + error);
         throw error;
@@ -67,7 +62,6 @@ export async function deleteServiceOrder(id: string): Promise<void> {
     try {
         const ref = doc(db, 'serviceOrders', id);
         await deleteDoc(ref);
-        alert('Ordem de serviço excluída com sucesso!');
     } catch (error) {
         alert('Erro ao excluir ordem de serviço: ' + error);
         throw error;

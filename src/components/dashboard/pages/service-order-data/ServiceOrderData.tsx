@@ -1,25 +1,84 @@
 import './service-order-data.scss'
 import { useEffect, useState } from 'react';
-import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton } from '@mui/material';
+import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton, TextField, Modal } from '@mui/material';
 import { findAllServiceOrders, updateServiceOrder } from '@service/ServiceOrderService';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Add, Print } from '@mui/icons-material';
+import { Add, Cancel, Print } from '@mui/icons-material';
 import { StatusOrder, ServiceOrder } from '@domain/service-order';
+import { EMPTY } from '@utils/string-utils';
+import { financialAdd } from '@service/FinancialService';
+import FinancialModal from '../financial-data/financial-modal/FinancialModal';
+import { Financial } from '@domain/financial';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
-    const [selectedStatus, setSelectedStatus] = useState(StatusOrder.PENDING.status);
+    const [selectedStatus, setSelectedStatus] = useState<string>(StatusOrder.PENDING.status);
+    const [statusConfirmMenssage, setStatusConfirmMenssage] = useState<string>('Clique para aceitar!')
+    const [currentOrder, setCurrentOrder] = useState<ServiceOrder | null>(null);
+    const [income, setIncome] = useState<number>(0);
+    const [_, setExpense] = useState<number>(0);
+    const [openModal, setOpenModal] = useState<boolean>(false);
 
     const navigate = useNavigate();
     const { userId } = useParams();
 
-    function newFinancial() {
+    function finalStatuses(status: string): boolean {
+        return status === StatusOrder.CANCELED.status || status === StatusOrder.COMPLETED.status;
+    }
+
+    function newFinancial(): void | Promise<void> {
         return navigate(`/dashboard/${userId}/add-service`);
     }
 
-    function acceptOrder(order: ServiceOrder): void {
-        order.status = StatusOrder.IN_PROGRESS.status;
-        updateServiceOrder(order.id, order);
+    function handleOpenModal(order: ServiceOrder) {
+        setCurrentOrder(order);
+        setIncome(order.serviceValue);
+        setExpense(0);
+        setOpenModal(true);
+    }
+
+    async function handleConfirmFinancial(income: number, expense: number) {
+        if (!currentOrder) return;
+
+        const newFinancial = new Financial(
+            undefined,
+            currentOrder,
+            currentOrder.collaborator,
+            income,
+            expense
+        );
+    
+        await financialAdd(newFinancial);
+
+        await updateServiceOrder(currentOrder.id, {
+            ...currentOrder,
+            status: StatusOrder.COMPLETED.status
+        });
+
+        setServiceOrders(prev => prev.filter(o => o.id !== currentOrder.id));
+        setOpenModal(false);
+        setCurrentOrder(null);
+    }
+
+    async function acceptOrder(order: ServiceOrder): Promise<void> {
+        if (order.status === StatusOrder.PENDING.status) {
+            setStatusConfirmMenssage('Clique para finalizar!')
+            order.status = StatusOrder.IN_PROGRESS.status;
+            await updateServiceOrder(order.id, { ...order, status: order.status });
+                
+            setServiceOrders(prev =>
+                prev.filter(o => o.id !== order.id)
+            );
+        } else if (order.status === StatusOrder.IN_PROGRESS.status) {
+            handleOpenModal(order);
+        }
+    }
+
+    async function cancelOrder(order: ServiceOrder): Promise<void> {    
+        await updateServiceOrder(order.id, { ...order, status: StatusOrder.CANCELED.status });
+        setServiceOrders(prev =>
+            prev.filter(o => o.id !== order.id)
+        );
     }
 
     useEffect(() => {
@@ -56,7 +115,7 @@ export default function ServiceOrderData() {
                         <Typography
                             key={it?.status}
                             variant="body1"
-                            className={`status-title ${selectedStatus === it?.status ? 'active' : ''}`}
+                            className={`status-title ${selectedStatus === it?.status ? 'active' : EMPTY}`}
                             onClick={() => setSelectedStatus(it?.status)}
                             style={{ color: selectedStatus === it?.status ? color : undefined }}
                         >
@@ -80,10 +139,21 @@ export default function ServiceOrderData() {
                                     const { label, color } = StatusOrder.getStatusColorAndLabel(order.status);
                                     return (
                                         <Box display={'flex'} flexDirection={'column'} alignItems={'end'}>
+                                            {!finalStatuses(order.status) && (
+                                                <Tooltip 
+                                                    title="Click to cancel order" 
+                                                    className='button-cancel'
+                                                    onClick={() => cancelOrder(order)}
+                                                >
+                                                    <IconButton>
+                                                        <Cancel/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
                                             <Typography variant="h6" style={{ color }}>
                                                 {label}
                                             </Typography>
-                                            <Tooltip title="Click to new client" className='button'>
+                                            <Tooltip title="Click to scanner" className='button'>
                                                 <IconButton>
                                                     <Print/>
                                                 </IconButton>
@@ -102,20 +172,29 @@ export default function ServiceOrderData() {
                             <Typography variant="body2">Estado: {order.client.state}</Typography>
 
                             <Typography variant="body2"  mt={1}>Colaborador: {order.collaborator.name}</Typography>
-
-                            <Box className='order-button'>
-                                <Typography variant="body2" className='secondary-title'>Clique para aceitar</Typography>
-                                <Tooltip title="Click to new client" className='button'>
-                                    <IconButton onClick={() => acceptOrder(order)}>
-                                        <Add/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
+                            {!finalStatuses(order.status) && (
+                                <Box 
+                                    className='order-button'>
+                                    <Typography variant="body2" className='secondary-title'>{statusConfirmMenssage}</Typography>
+                                    <Tooltip title="Click to new client" className='button'>
+                                        <IconButton onClick={() => acceptOrder(order)}>
+                                            <Add/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            )}
                         </Paper>
                     ))
                 )}
-
             </div>
+            <Modal open={openModal} onClose={() => setOpenModal(false)}>
+            <FinancialModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onConfirm={handleConfirmFinancial}
+                incomeDefault={income}
+            />
+            </Modal>
         </>
     );
 }

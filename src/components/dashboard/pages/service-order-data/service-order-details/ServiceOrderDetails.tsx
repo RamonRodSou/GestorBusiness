@@ -5,7 +5,6 @@ import BackButton from "@components/back-button/BackButton";
 import { Client, CollaboratorSummary } from "@domain/user";
 import { findAllClients } from "@service/UserService";
 import { EMPTY } from "@utils/string-utils";
-import { Financial } from "@domain/financial";
 import { findAllCollaborators } from "@service/CollaboratorService";
 import { ServiceOrder, StatusOrder } from "@domain/service-order";
 
@@ -17,6 +16,33 @@ export default function ServiceOrderDetails() {
     const [description, setDescription] = useState<string>(EMPTY);
     const [orderNumber, setOrderNumber] = useState<number>(1);
     const [serviceValue, setServiceValue] = useState<number>(0);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedClient || !selectedCollaborator) return;
+    
+        const newOrder = new ServiceOrder(
+            description,
+            selectedClient,
+            selectedCollaborator,
+            StatusOrder.PENDING.status,
+            orderNumber,
+            serviceValue,
+            new Date().toISOString(),
+        );
+    
+        await serviceOrderAdd(newOrder);
+    
+        setDescription(EMPTY);
+        setSelectedClient(null);
+        setSelectedCollaborator(null);
+    
+        const updatedOrders = await findAllServiceOrders();
+        const lastNumber = updatedOrders.length > 0
+            ? Math.max(...updatedOrders.map(order =>  Number(order.orderNumber) || 0))
+            : 0;
+        setOrderNumber(lastNumber + 1);
+    };
 
     useEffect(() => {
         async function loadData() {
@@ -37,38 +63,9 @@ export default function ServiceOrderDetails() {
         loadData();
     }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!selectedClient || !selectedCollaborator) return;
-    
-        const newOrder = new ServiceOrder(
-            description,
-            selectedClient,
-            selectedCollaborator,
-            new Financial(),
-            StatusOrder.PENDING.status,
-            orderNumber,
-            serviceValue,
-            new Date().toISOString(),
-        );
-    
-        await serviceOrderAdd(newOrder);
-    
-        setDescription(EMPTY);
-        setSelectedClient(null);
-        setSelectedCollaborator(null);
-    
-        const updatedOrders = await findAllServiceOrders();
-        const lastNumber = updatedOrders.length > 0
-            ? Math.max(...updatedOrders.map(order =>  Number(order.orderNumber) || 0))
-            : 0;
-        setOrderNumber(lastNumber + 1);
-    };
-    
-
     return (
         <>
-            <BackButton isToHome={false} />
+            <BackButton path={'service-order'} />
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
                     <h2>Nova Ordem de Serviço</h2>
