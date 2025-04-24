@@ -1,6 +1,6 @@
 import './service-order-data.scss'
 import { useEffect, useState } from 'react';
-import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton, Modal } from '@mui/material';
+import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton } from '@mui/material';
 import { findAllServiceOrders, updateServiceOrder } from '@service/ServiceOrderService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Add, Cancel, Print } from '@mui/icons-material';
@@ -15,8 +15,8 @@ export default function ServiceOrderData() {
     const [selectedStatus, setSelectedStatus] = useState<string>(StatusOrder.PENDING.status);
     const [statusConfirmMenssage, setStatusConfirmMenssage] = useState<string>('Clique para aceitar!')
     const [currentOrder, setCurrentOrder] = useState<ServiceOrder | null>(null);
-    const [income, setIncome] = useState<number>(0);
-    const [_, setExpense] = useState<number>(0);
+    const [_, setIncome] = useState<number>(0);
+    const [__, setExpense] = useState<number>(0);
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -137,6 +137,7 @@ export default function ServiceOrderData() {
                                 </span>
                                 {(() => {
                                     const { label, color } = StatusOrder.getStatusColorAndLabel(order.status);
+
                                     return (
                                         <Box display={'flex'} flexDirection={'column'} alignItems={'end'}>
                                             {!finalStatuses(order.status) && (
@@ -171,7 +172,8 @@ export default function ServiceOrderData() {
                             <Typography variant="body2">Cidade: {order.client.city}</Typography>
                             <Typography variant="body2">Estado: {order.client.state}</Typography>
 
-                            <Typography variant="body2"  mt={1}>Colaborador: {order.collaborator.name}</Typography>
+                            <Typography variant="body2"mt={1}>R$: {order.serviceValue}</Typography>
+                            <Typography variant="body2">Colaborador: {order.collaborator.name}</Typography>
                             {!finalStatuses(order.status) && (
                                 <Box 
                                     className='order-button'>
@@ -187,14 +189,15 @@ export default function ServiceOrderData() {
                     ))
                 )}
             </div>
-            <Modal open={openModal} onClose={() => setOpenModal(false)}>
-            <FinancialModal
-                open={openModal}
-                onClose={() => setOpenModal(false)}
-                onConfirm={handleConfirmFinancial}
-                incomeDefault={income}
-            />
-            </Modal>
+            {serviceOrders.map(order => (
+                <FinancialModal
+                    order={order}
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                    onConfirm={handleConfirmFinancial}
+                    incomeDefault={currentOrder?.serviceValue ?? 0}
+                />
+            ))}
         </>
     );
 }

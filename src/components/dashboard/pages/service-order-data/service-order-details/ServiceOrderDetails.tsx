@@ -97,6 +97,7 @@ export default function ServiceOrderDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Descrição"
+                            type="text"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             fullWidth
@@ -107,13 +108,13 @@ export default function ServiceOrderDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Valor do Serviço"
+                            type="number"
                             value={serviceValue}
-                            onChange={(e) => setServiceValue(Number(e.target.value))}
+                            onChange={(e) => setServiceValue(parseFloat(e.target.value))}
                             fullWidth
                             required
                         />
                     </Box>
-                    
 
                     <Button type="submit" variant="contained" color="primary" fullWidth>
                         Salvar Ordem

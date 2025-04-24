@@ -13,6 +13,7 @@ export async function serviceOrderAdd(order: ServiceOrder) {
             description: order.description,
             orderNumber: order.orderNumber,
             createdAt: order.createdAt,
+            serviceValue: order.serviceValue,
             status: order.status
         });
     } catch (error) {
