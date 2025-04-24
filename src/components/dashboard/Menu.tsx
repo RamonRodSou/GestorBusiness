@@ -5,6 +5,7 @@ import {
     Settings,
     People,
     Assignment,
+    Hail,
   } from '@mui/icons-material';
 
 interface IMenu {
@@ -23,6 +24,11 @@ export const menuItems: IMenu[] = [
         path: 'clients',
         label: 'Clientes',
         icon: <People/>,
+    },
+    {
+        path: 'collaborator',
+        label: 'Colaboradores',
+        icon: <Hail/>,
     },
     {
         path: 'financial',
