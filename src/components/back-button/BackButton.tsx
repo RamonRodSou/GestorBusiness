@@ -1,7 +1,7 @@
 import './back-button.scss'
-import { Admin } from "@domain/admin";
+import { Admin } from '@domain/user';
 import { ArrowBack } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type props = {
@@ -25,7 +25,7 @@ export default function BackButton({isToHome = true}: props) {
     }
 
     return (
-        <Tooltip className='back-button' title="Click to back page">
+        <Tooltip title="Click to back page" className='back-button' >
             <IconButton onClick={() => backOrNavigate()}>
                 <ArrowBack/>
             </IconButton>
