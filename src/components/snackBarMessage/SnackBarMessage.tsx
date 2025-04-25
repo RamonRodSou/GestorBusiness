@@ -3,11 +3,11 @@ import { Snackbar, SnackbarCloseReason } from "@mui/material";
 type snackBarType = {
     openSnackbar: boolean;
     setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
-    message: string;
-
+    message: string | (() => string); 
 }
 
 export default function SnackBarMessage({openSnackbar, setOpenSnackbar, message}: snackBarType) {
+    const resolvedMessage = typeof message === 'function' ? message() : message;
 
     const handleClose = (
         _: React.SyntheticEvent | Event,
@@ -22,7 +22,7 @@ export default function SnackBarMessage({openSnackbar, setOpenSnackbar, message}
             open={openSnackbar}
             autoHideDuration={6000}
             onClose={handleClose}
-            message={message}
+            message={resolvedMessage}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             sx={{ '& .MuiSnackbarContent-root': { justifyContent: 'center' } }}
     />

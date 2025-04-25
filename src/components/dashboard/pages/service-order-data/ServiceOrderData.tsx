@@ -1,5 +1,5 @@
 import './service-order-data.scss'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Typography, Paper, Divider, Button, Box, Tooltip, IconButton } from '@mui/material';
 import { findAllServiceOrders, updateServiceOrder } from '@service/ServiceOrderService';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,9 @@ import FinancialModal from '../financial-data/financial-modal/FinancialModal';
 import { Financial } from '@domain/financial';
 import { updateClient } from '@service/UserService';
 import { Client } from '@domain/user';
+import SnackBarMessage from '@components/snackBarMessage/SnackBarMessage';
+import { ManagerContext } from '@context/ManagerContext';
+import ConfirmModal from '@components/confirm-modal/ConfirmModal';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
@@ -19,7 +22,8 @@ export default function ServiceOrderData() {
     const [_, setIncome] = useState<number>(0);
     const [__, setExpense] = useState<number>(0);
     const [openModal, setOpenModal] = useState<boolean>(false);
-
+    const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
+    const { openSnackbar, setOpenSnackbar, snackbarMessage, setSnackbarMessage } = useContext(ManagerContext);
     const navigate = useNavigate();
     const { userId } = useParams();
 
@@ -38,28 +42,40 @@ export default function ServiceOrderData() {
         setOpenModal(true);
     }
 
-    async function handleOSCompleted(income: number, expense: number) {
-        if (!currentOrder) return;
-
+    async function addFinancialRecord(order: ServiceOrder, income: number, expense: number): Promise<void> {
         const newFinancial = new Financial(
             undefined,
-            currentOrder,
-            currentOrder.collaborator,
+            order,
+            order.collaborator,
             income,
             expense
         );
-
-        const newServiceToClient: Client = currentOrder.client;
-        newServiceToClient.serviceHistory.push(currentOrder.id)
-    
         await financialAdd(newFinancial);
-        await updateClient(currentOrder.client.id, newServiceToClient);
+    }
 
-        await updateServiceOrder(currentOrder.id, {
-            ...currentOrder,
+    async function updateClientServiceHistory(order: ServiceOrder): Promise<void> {
+        const updatedClient: Client = order.client;
+        updatedClient.serviceHistory.push(order.id);
+        await updateClient(updatedClient.id, { serviceHistory: updatedClient.serviceHistory });
+    }
+
+    async function markOrderAsCompleted(order: ServiceOrder): Promise<void> {
+        await updateServiceOrder(order.id, {
+            ...order,
             status: StatusOrder.COMPLETED.status
         });
+    }
+    
+    async function completeServiceOrder(income: number, expense: number): Promise<void> {
+        if (!currentOrder) return;
+    
+        await addFinancialRecord(currentOrder, income, expense);
+        await updateClientServiceHistory(currentOrder);
+        await markOrderAsCompleted(currentOrder);
 
+        setOpenSnackbar(true);
+        setSnackbarMessage(`OS Nº ${currentOrder.orderNumber} foi finalizada com sucesso!`);
+    
         setServiceOrders(prev => prev.filter(o => o.id !== currentOrder.id));
         setOpenModal(false);
         setCurrentOrder(null);
@@ -69,10 +85,12 @@ export default function ServiceOrderData() {
         if (order.status === StatusOrder.PENDING.status) {
             order.status = StatusOrder.IN_PROGRESS.status;
             await updateServiceOrder(order.id, { ...order, status: order.status });
-                
+            setOpenSnackbar(true);
+            setSnackbarMessage(`OS Nº ${order.orderNumber} está em andamento!`);
             setServiceOrders(prev =>
                 prev.filter(it => it.id !== order.id)
             );
+
         } else if (order.status === StatusOrder.IN_PROGRESS.status) {
             handleOpenModal(order);
         }
@@ -86,11 +104,18 @@ export default function ServiceOrderData() {
         }
     }
 
-    async function cancelOrder(order: ServiceOrder): Promise<void> {    
-        await updateServiceOrder(order.id, { ...order, status: StatusOrder.CANCELED.status });
+    async function openConfirmModalCancel(order: ServiceOrder): Promise<void> {
+        setOpenConfirmModal(true) 
+        setCurrentOrder(order)
+    }
+    async function cancelOrder(): Promise<void> {         
+        if(!currentOrder) return;
+
+        await updateServiceOrder(currentOrder.id, { ...currentOrder, status: StatusOrder.CANCELED.status });
         setServiceOrders(prev =>
-            prev.filter(it => it.id !== order.id)
+            prev.filter(it => it.id !== currentOrder.id)
         );
+        setOpenConfirmModal(false)
     }
 
     useEffect(() => {
@@ -144,7 +169,7 @@ export default function ServiceOrderData() {
                         <Paper key={order.id} className='paper-order' elevation={3}>
                             <Box className='status-order'>
                                 <span>
-                                    <Typography variant="h6" className='title-secondary'>Ordem Nº {order.orderNumber}</Typography>
+                                    <Typography variant="h6" className='title-secondary'>OS Nº {order.orderNumber}</Typography>
                                     <Typography variant="caption" display="block" mt={1}>Criado em: {new Date(order.createdAt).toLocaleDateString()}</Typography>
                                 </span>
                                 {(() => {
@@ -156,7 +181,7 @@ export default function ServiceOrderData() {
                                                 <Tooltip 
                                                     title="Click to cancel order" 
                                                     className='button-cancel'
-                                                    onClick={() => cancelOrder(order)}
+                                                    onClick={() => openConfirmModalCancel(order)}
                                                 >
                                                     <IconButton>
                                                         <Cancel/>
@@ -201,14 +226,25 @@ export default function ServiceOrderData() {
                     ))
                 )}
             </div>
+            <SnackBarMessage 
+                message={snackbarMessage} 
+                openSnackbar={openSnackbar} 
+                setOpenSnackbar={setOpenSnackbar}
+            />
+            <ConfirmModal 
+                open={openConfirmModal} 
+                onClose={() => setOpenConfirmModal(false)} 
+                onConfirm={() => cancelOrder()} 
+                message={`Tem certeza do canelamento da OS  Nº ${currentOrder?.orderNumber}`}
+            />
             {serviceOrders.map(order => (
                 <FinancialModal
                     order={order}
                     open={openModal}
                     onClose={() => setOpenModal(false)}
-                    onConfirm={handleOSCompleted}
+                    onConfirm={completeServiceOrder}
                     incomeDefault={currentOrder?.serviceValue ?? 0}
-                />
+                />                
             ))}
         </>
     );

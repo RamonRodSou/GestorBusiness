@@ -3,14 +3,16 @@ import './financial-modal.scss';
 import { Dialog, DialogContent, DialogActions, TextField, Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-export default function FinancialModal({ open, onClose, onConfirm, incomeDefault, order, title }: {
+type financialType = {
     open: boolean;
     onClose: () => void;
     onConfirm: (income: number, expense: number) => void;
     incomeDefault: number;
     order?: ServiceOrder;
     title?: string;
-}) {
+}
+
+export default function FinancialModal({ open, onClose, onConfirm, incomeDefault, order, title }: financialType) {
     const [income, setIncome] = useState(incomeDefault);
     const [expense, setExpense] = useState(0);
 

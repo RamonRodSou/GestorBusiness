@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField, Box, Button, Container } from "@mui/material";
 import { serviceOrderAdd, findAllServiceOrders } from "@service/ServiceOrderService";
 import BackButton from "@components/back-button/BackButton";
@@ -8,6 +8,8 @@ import { EMPTY } from "@utils/string-utils";
 import { findAllCollaborators } from "@service/CollaboratorService";
 import { ServiceOrder, StatusOrder } from "@domain/service-order";
 import SnackBarMessage from "@components/snackBarMessage/SnackBarMessage";
+import { useNavigate, useParams } from "react-router-dom";
+import { ManagerContext } from "@context/ManagerContext";
 
 export default function ServiceOrderDetails() {
     const [clients, setClients] = useState<Client[]>([]);
@@ -17,39 +19,49 @@ export default function ServiceOrderDetails() {
     const [description, setDescription] = useState<string>(EMPTY);
     const [orderNumber, setOrderNumber] = useState<number>(1);
     const [serviceValue, setServiceValue] = useState<number>(0);
-    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+    const { openSnackbar, setOpenSnackbar, snackbarMessage, setSnackbarMessage } = useContext(ManagerContext);
+    const navigate = useNavigate();
+    const { userId } = useParams();
+
+    async function addServiceOrderRecord(
+        selectedClient: Client, 
+        selectedCollaborator: CollaboratorSummary
+    ): Promise<void> {
+        
+        const newOrder = new ServiceOrder(
+            description,
+            selectedClient,
+            selectedCollaborator,
+            StatusOrder.PENDING.status,
+            orderNumber,
+            serviceValue,
+            new Date().toISOString(),
+        );
+        await serviceOrderAdd(newOrder);
+
+        const updatedOrders = await findAllServiceOrders();
+        const lastNumber = updatedOrders.length > 0
+            ? Math.max(...updatedOrders.map(order => Number(order.orderNumber) || 0))
+            : 0;
+        setOrderNumber(lastNumber + 1);
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedClient || !selectedCollaborator) return;
     
         try {
-            const newOrder = new ServiceOrder(
-                description,
-                selectedClient,
-                selectedCollaborator,
-                StatusOrder.PENDING.status,
-                orderNumber,
-                serviceValue,
-                new Date().toISOString(),
-            );
-    
-            await serviceOrderAdd(newOrder);
-            setOpenSnackbar(true);
-            
+            addServiceOrderRecord(selectedClient, selectedCollaborator)
             setDescription(EMPTY);
             setSelectedClient(null);
             setSelectedCollaborator(null);
             setServiceValue(0);
-    
-            const updatedOrders = await findAllServiceOrders();
-            const lastNumber = updatedOrders.length > 0
-                ? Math.max(...updatedOrders.map(order => Number(order.orderNumber) || 0))
-                : 0;
-            setOrderNumber(lastNumber + 1);
         } catch (err) {
             console.error("Erro ao salvar ordem de serviço:", err);
         }
+        navigate(`/dashboard/${userId}/service-order`);
+        setOpenSnackbar(true);
+        setSnackbarMessage('Ordem de serviço cadastrada com sucesso!')
     };
 
     useEffect(() => {
@@ -128,7 +140,7 @@ export default function ServiceOrderDetails() {
                         Salvar Ordem
                     </Button>
                     <SnackBarMessage 
-                        message={"Ordem de serviço criada com sucesso!"} 
+                        message={snackbarMessage} 
                         openSnackbar={openSnackbar} 
                         setOpenSnackbar={setOpenSnackbar}
                     />
