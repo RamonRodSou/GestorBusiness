@@ -8,7 +8,6 @@ import Preferences from '@components/dashboard/pages/preferences/Preferences';
 import ClientDetails from '@components/dashboard/pages/client-data/client-details/ClientDetails';
 import ClientData from '@components/dashboard/pages/client-data/ClientData';
 import FinancialData from '@components/dashboard/pages/financial-data/FinancialData';
-import FinancialDetails from '@components/dashboard/pages/financial-data/financial-details/financial-details';
 import ServiceOrderData from '@components/dashboard/pages/service-order-data/ServiceOrderData';
 import ServiceOrderDetails from '@components/dashboard/pages/service-order-data/service-order-details/ServiceOrderDetails';
 import CollaboratorData from '@components/dashboard/pages/collaborator-data/CollaboratorData';
@@ -27,7 +26,6 @@ function AppRouter() {
                     <Route path="new-collaborator" element={<CollaboratorDetails/>}/>
                     <Route path="new-client" element={<ClientDetails/>}/>
                     <Route path="financial" element={<FinancialData/>}/>
-                    <Route path="add-financial" element={<FinancialDetails/>}/>
                     <Route path="service-order" element={<ServiceOrderData/>}/>
                     <Route path="add-service" element={<ServiceOrderDetails/>}/>
                     <Route path="preferences" element={<Preferences/>}/>
