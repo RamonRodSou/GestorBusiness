@@ -1,6 +1,6 @@
 import { Client } from "@domain/user/client/Client";
 import firebase from "firebase/compat/app"
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 export async function clientAdd(client: Client) {
@@ -39,33 +39,30 @@ export async function findAllClients (): Promise<Client[]> {
     }
 }
 
-export const findbyclientId = async (id: string, setData: any) => {
+export async function findByClientId(id: string): Promise<Client | null> {
     try {
-        const docRef = await firebase.firestore().collection('clients').doc(id).get()
-        if (docRef.exists) {
-            const clientData = { id: docRef.id, ...docRef.data() } as Client
-            setData(clientData)
-        } else {
-            console.error('Documento não encontrado.')
-            setData(null)
-        }
+        const ref = doc(db, 'clients', id);
+        const snapshot = await getDoc(ref);
+
+        if (!snapshot.exists()) return null;
+
+        return { id: snapshot.id, ...snapshot.data() } as Client;
     } catch (error) {
-        console.error('Erro ao mostrar o cliente:', error)
-        alert('Erro ao obter a client. Verifique o console para mais detalhes.')
+        alert('Erro ao buscar cliente: ' + error);
+        throw error;
     }
 }
 
-export async function clientUpdate(id: string, client: Client) {
-  try {
-    await firebase.firestore().collection('clients').doc(id).update({
-        name: client.name,
-        phone: client.phone,
-        email: client.email,
-    })
-  } catch (error) {
-        alert('Erro ao atualizar o cliente: ' + error)
-  }
+export async function updateClient(id: string, data: Partial<Client>): Promise<void> {
+    try {
+        const ref = doc(db, 'clients', id);
+        await updateDoc(ref, data);
+    } catch (error) {
+        alert('Erro ao atualizar ordem de serviço: ' + error);
+        throw error;
+    }
 }
+
 
 export async function clientDelete(id: string) {
     try {
