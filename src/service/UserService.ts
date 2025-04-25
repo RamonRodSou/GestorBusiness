@@ -18,6 +18,7 @@ export async function clientAdd(client: Client) {
             state: client.state,
             zipCode: client.zipCode,
             country: client.country,
+            serviceHistory: client.serviceHistory,
             createdAt: client.createdAt,
         });
     } catch (error) {

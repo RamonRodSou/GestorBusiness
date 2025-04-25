@@ -14,6 +14,7 @@ export class Client extends User {
 		public state: string = EMPTY,
 		public zipCode: string = EMPTY,
 		public country: string = EMPTY,
+        public serviceHistory: string[] = [],
 		public createdAt: string = new Date().toISOString()
 	) {
 		super(id, name, email, phone, street, houserNumber, city, state, zipCode, country, createdAt);
@@ -31,6 +32,7 @@ export class Client extends User {
             json.state,
             json.zipCode,
             json.country,
+            json.serviceHistory || [],
             json.createdAt
         );
     }
@@ -47,6 +49,7 @@ export class Client extends User {
             state: this.state,
             zipCode: this.zipCode,
             country: this.country,
+            serviceHistory: this.serviceHistory,
             createdAt: this.createdAt,
         };
     }

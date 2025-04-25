@@ -9,6 +9,8 @@ import { EMPTY } from '@utils/string-utils';
 import { financialAdd } from '@service/FinancialService';
 import FinancialModal from '../financial-data/financial-modal/FinancialModal';
 import { Financial } from '@domain/financial';
+import { updateClient } from '@service/UserService';
+import { Client } from '@domain/user';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
@@ -36,7 +38,7 @@ export default function ServiceOrderData() {
         setOpenModal(true);
     }
 
-    async function handleConfirmFinancial(income: number, expense: number) {
+    async function handleOSCompleted(income: number, expense: number) {
         if (!currentOrder) return;
 
         const newFinancial = new Financial(
@@ -46,8 +48,12 @@ export default function ServiceOrderData() {
             income,
             expense
         );
+
+        const newServiceToClient: Client = currentOrder.client;
+        newServiceToClient.serviceHistory.push(currentOrder.id)
     
         await financialAdd(newFinancial);
+        await updateClient(currentOrder.client.id, newServiceToClient);
 
         await updateServiceOrder(currentOrder.id, {
             ...currentOrder,
@@ -200,7 +206,7 @@ export default function ServiceOrderData() {
                     order={order}
                     open={openModal}
                     onClose={() => setOpenModal(false)}
-                    onConfirm={handleConfirmFinancial}
+                    onConfirm={handleOSCompleted}
                     incomeDefault={currentOrder?.serviceValue ?? 0}
                 />
             ))}
