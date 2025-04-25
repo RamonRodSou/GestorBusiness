@@ -1,6 +1,6 @@
-import { ManagerContext } from "@context/ManagerContext";
 import { TextField } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { EMPTY } from "@utils/string-utils";
+import { useEffect, useState } from "react";
 
 type SearchProps<T extends { name: string }> = {
     data: T[];
@@ -8,8 +8,8 @@ type SearchProps<T extends { name: string }> = {
 };
 
 export default function Search<T extends { name: string }>({ data, onFilter }: SearchProps<T>) {
-    const { searchTerm, setSearchTerm } = useContext(ManagerContext);
-
+    const [searchTerm, setSearchTerm] = useState<string>(EMPTY);
+    
     useEffect(() => {
         const filtered = data.filter((it) =>
             it.name.toLowerCase().includes(searchTerm.toLowerCase())

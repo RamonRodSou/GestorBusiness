@@ -9,8 +9,8 @@ interface managerContextType {
     isMobile: boolean;
     setIsMobile: React.Dispatch<React.SetStateAction<boolean>>;
 
-    searchTerm: string;
-    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+    openSnackbar: boolean;
+    setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ManagerContext = createContext<managerContextType>({
@@ -20,8 +20,8 @@ export const ManagerContext = createContext<managerContextType>({
     isMobile: false,
     setIsMobile: () => { },
 
-    searchTerm: EMPTY,
-    setSearchTerm: () => { },
+    openSnackbar: false,
+    setOpenSnackbar: () => { },
 })
 
 export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -29,7 +29,8 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const matches = useMediaQuery(theme.breakpoints.down("sm"));
     const [data, setData] = useState<string>(EMPTY);
     const [isMobile, setIsMobile] = useState<boolean>(matches);
-    const [searchTerm, setSearchTerm] = useState<string>(EMPTY);
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+
 
     useEffect(() => {
         setIsMobile(matches);
@@ -37,7 +38,7 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     return (
         <ManagerContext.Provider value={{
-                data, setData, isMobile, setIsMobile, searchTerm, setSearchTerm
+                data, setData, isMobile, setIsMobile, openSnackbar, setOpenSnackbar
             }}
         >
             {children}
