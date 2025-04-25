@@ -14,7 +14,6 @@ export async function collaboratorAdd(collaborator: Collaborator) {
             phone: collaborator.phone,
             createdAt: collaborator.createdAt,
         });
-        alert('Colaborador adicionado com sucesso!');
     } catch (error) {
         alert('Erro ao adicionar colaborador: ' + error);
         throw error;

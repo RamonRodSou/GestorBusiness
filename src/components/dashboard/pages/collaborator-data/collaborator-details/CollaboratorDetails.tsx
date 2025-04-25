@@ -3,9 +3,12 @@ import { Box, Button, Container, TextField } from "@mui/material";
 import BackButton from '@components/back-button/BackButton';
 import { Collaborator } from '@domain/user';
 import { collaboratorAdd } from '@service/CollaboratorService';
+import { EMPTY } from "@utils/string-utils";
+import SnackBarMessage from "@components/snackBarMessage/SnackBarMessage";
 
 export default function CollaboratorDetails() {
     const [collaborator, setCollaborator] = useState<Collaborator>(new Collaborator());
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
     const handleChange = (field: keyof Collaborator, value: string | number) => {
         setCollaborator(prev => {
@@ -17,6 +20,7 @@ export default function CollaboratorDetails() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await collaboratorAdd(collaborator);
+        setOpenSnackbar(true);
         setCollaborator(new Collaborator());
     };
 
@@ -67,7 +71,7 @@ export default function CollaboratorDetails() {
                         <TextField
                             label="Número"
                             type="number"
-                            value={collaborator.houserNumber ?? ""}
+                            value={collaborator.houserNumber ?? EMPTY}
                             onChange={(e) => handleChange("houserNumber", Number(e.target.value))}
                             fullWidth
                             required
@@ -113,6 +117,11 @@ export default function CollaboratorDetails() {
                         Salvar Cliente
                     </Button>
                 </form>
+                <SnackBarMessage 
+                    message={"Cliente criado com sucesso!"} 
+                    openSnackbar={openSnackbar} 
+                    setOpenSnackbar={setOpenSnackbar}
+                />
             </Container>
         </>
     );

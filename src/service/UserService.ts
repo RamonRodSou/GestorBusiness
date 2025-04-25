@@ -20,7 +20,6 @@ export async function clientAdd(client: Client) {
             country: client.country,
             createdAt: client.createdAt,
         });
-        alert('Cliente registrado com sucesso!');
     } catch (error) {
         alert('Erro ao registrar um novo cliente: ' + error);
         throw error;

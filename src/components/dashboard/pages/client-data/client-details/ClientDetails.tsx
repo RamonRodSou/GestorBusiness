@@ -4,12 +4,15 @@ import { Box, Button, Container, TextField } from "@mui/material";
 import { Client } from "@domain/user/client/Client";
 import { clientAdd } from '@service/UserService';
 import BackButton from '@components/back-button/BackButton';
+import SnackBarMessage from '@components/snackBarMessage/SnackBarMessage';
+import { EMPTY } from '@utils/string-utils';
 
 export default function ClientDetails() {
-    const [client, setClient] = useState<Client>(new Client());
+    const [data, setData] = useState<Client>(new Client());
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
     const handleChange = (field: keyof Client, value: string | number) => {
-        setClient(prev => {
+        setData(prev => {
             const updated = { ...prev, [field]: value };
             return Client.fromJson(updated);
         });
@@ -17,8 +20,9 @@ export default function ClientDetails() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await clientAdd(client);
-        setClient(new Client());
+        await clientAdd(data);
+        setData(new Client());
+        setOpenSnackbar(true);
     };
 
     return (
@@ -30,7 +34,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Nome"
-                            value={client.name}
+                            value={data.name}
                             onChange={(e) => handleChange("name", e.target.value)}
                             fullWidth
                             required
@@ -39,7 +43,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Telefone"
-                            value={client.phone}
+                            value={data.phone}
                             onChange={(e) => handleChange("phone", e.target.value)}
                             fullWidth
                             required
@@ -49,7 +53,7 @@ export default function ClientDetails() {
                         <TextField
                             label="Email"
                             type="email"
-                            value={client.email}
+                            value={data.email}
                             onChange={(e) => handleChange("email", e.target.value)}
                             fullWidth
                             required
@@ -58,7 +62,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Rua"
-                            value={client.street}
+                            value={data.street}
                             onChange={(e) => handleChange("street", e.target.value)}
                             fullWidth
                             required
@@ -68,7 +72,7 @@ export default function ClientDetails() {
                         <TextField
                             label="Número"
                             type="number"
-                            value={client.houserNumber ?? ""}
+                            value={data.houserNumber ?? EMPTY}
                             onChange={(e) => handleChange("houserNumber", Number(e.target.value))}
                             fullWidth
                             required
@@ -77,7 +81,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Cidade"
-                            value={client.city}
+                            value={data.city}
                             onChange={(e) => handleChange("city", e.target.value)}
                             fullWidth
                             required
@@ -86,7 +90,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="Estado"
-                            value={client.state}
+                            value={data.state}
                             onChange={(e) => handleChange("state", e.target.value)}
                             fullWidth
                             required
@@ -95,7 +99,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="CEP"
-                            value={client.zipCode}
+                            value={data.zipCode}
                             onChange={(e) => handleChange("zipCode", e.target.value)}
                             fullWidth
                             required
@@ -104,7 +108,7 @@ export default function ClientDetails() {
                     <Box mb={2}>
                         <TextField
                             label="País"
-                            value={client.country}
+                            value={data.country}
                             onChange={(e) => handleChange("country", e.target.value)}
                             fullWidth
                             required
@@ -114,6 +118,11 @@ export default function ClientDetails() {
                         Salvar Cliente
                     </Button>
                 </form>
+                <SnackBarMessage 
+                    message={"Cliente criado com sucesso!"} 
+                    openSnackbar={openSnackbar} 
+                    setOpenSnackbar={setOpenSnackbar}
+                />
             </Container>
         </>
     );

@@ -7,6 +7,7 @@ import { findAllClients } from "@service/UserService";
 import { EMPTY } from "@utils/string-utils";
 import { findAllCollaborators } from "@service/CollaboratorService";
 import { ServiceOrder, StatusOrder } from "@domain/service-order";
+import SnackBarMessage from "@components/snackBarMessage/SnackBarMessage";
 
 export default function ServiceOrderDetails() {
     const [clients, setClients] = useState<Client[]>([]);
@@ -16,32 +17,39 @@ export default function ServiceOrderDetails() {
     const [description, setDescription] = useState<string>(EMPTY);
     const [orderNumber, setOrderNumber] = useState<number>(1);
     const [serviceValue, setServiceValue] = useState<number>(0);
+    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedClient || !selectedCollaborator) return;
     
-        const newOrder = new ServiceOrder(
-            description,
-            selectedClient,
-            selectedCollaborator,
-            StatusOrder.PENDING.status,
-            orderNumber,
-            serviceValue,
-            new Date().toISOString(),
-        );
+        try {
+            const newOrder = new ServiceOrder(
+                description,
+                selectedClient,
+                selectedCollaborator,
+                StatusOrder.PENDING.status,
+                orderNumber,
+                serviceValue,
+                new Date().toISOString(),
+            );
     
-        await serviceOrderAdd(newOrder);
+            await serviceOrderAdd(newOrder);
+            setOpenSnackbar(true);
+            
+            setDescription(EMPTY);
+            setSelectedClient(null);
+            setSelectedCollaborator(null);
+            setServiceValue(0);
     
-        setDescription(EMPTY);
-        setSelectedClient(null);
-        setSelectedCollaborator(null);
-    
-        const updatedOrders = await findAllServiceOrders();
-        const lastNumber = updatedOrders.length > 0
-            ? Math.max(...updatedOrders.map(order =>  Number(order.orderNumber) || 0))
-            : 0;
-        setOrderNumber(lastNumber + 1);
+            const updatedOrders = await findAllServiceOrders();
+            const lastNumber = updatedOrders.length > 0
+                ? Math.max(...updatedOrders.map(order => Number(order.orderNumber) || 0))
+                : 0;
+            setOrderNumber(lastNumber + 1);
+        } catch (err) {
+            console.error("Erro ao salvar ordem de serviço:", err);
+        }
     };
 
     useEffect(() => {
@@ -119,6 +127,11 @@ export default function ServiceOrderDetails() {
                     <Button type="submit" variant="contained" color="primary" fullWidth>
                         Salvar Ordem
                     </Button>
+                    <SnackBarMessage 
+                        message={"Ordem de serviço criada com sucesso!"} 
+                        openSnackbar={openSnackbar} 
+                        setOpenSnackbar={setOpenSnackbar}
+                    />
                 </form>
             </Container>
         </>

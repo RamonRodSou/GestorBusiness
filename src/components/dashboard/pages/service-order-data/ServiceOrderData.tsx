@@ -13,7 +13,6 @@ import { Financial } from '@domain/financial';
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
     const [selectedStatus, setSelectedStatus] = useState<string>(StatusOrder.PENDING.status);
-    const [statusConfirmMenssage, setStatusConfirmMenssage] = useState<string>('Clique para aceitar!')
     const [currentOrder, setCurrentOrder] = useState<ServiceOrder | null>(null);
     const [_, setIncome] = useState<number>(0);
     const [__, setExpense] = useState<number>(0);
@@ -26,7 +25,7 @@ export default function ServiceOrderData() {
         return status === StatusOrder.CANCELED.status || status === StatusOrder.COMPLETED.status;
     }
 
-    function newFinancial(): void | Promise<void> {
+    function newOrderService(): void | Promise<void> {
         return navigate(`/dashboard/${userId}/add-service`);
     }
 
@@ -62,22 +61,29 @@ export default function ServiceOrderData() {
 
     async function acceptOrder(order: ServiceOrder): Promise<void> {
         if (order.status === StatusOrder.PENDING.status) {
-            setStatusConfirmMenssage('Clique para finalizar!')
             order.status = StatusOrder.IN_PROGRESS.status;
             await updateServiceOrder(order.id, { ...order, status: order.status });
                 
             setServiceOrders(prev =>
-                prev.filter(o => o.id !== order.id)
+                prev.filter(it => it.id !== order.id)
             );
         } else if (order.status === StatusOrder.IN_PROGRESS.status) {
             handleOpenModal(order);
         }
     }
 
+    function typeOrderMenssage(order: ServiceOrder): string {
+        if (order.status === StatusOrder.PENDING.status) {
+            return 'Clique para aceitar!';
+        } else  {
+            return 'Clique para finalizar!';
+        }
+    }
+
     async function cancelOrder(order: ServiceOrder): Promise<void> {    
         await updateServiceOrder(order.id, { ...order, status: StatusOrder.CANCELED.status });
         setServiceOrders(prev =>
-            prev.filter(o => o.id !== order.id)
+            prev.filter(it => it.id !== order.id)
         );
     }
 
@@ -102,7 +108,7 @@ export default function ServiceOrderData() {
                 <Button 
                     variant="contained" 
                     color="primary" 
-                    onClick={() =>newFinancial()}
+                    onClick={() => newOrderService()}
                 >
                     Nova Ordem de Serviço
                 </Button>
@@ -159,7 +165,7 @@ export default function ServiceOrderData() {
                                                     <Print/>
                                                 </IconButton>
                                             </Tooltip>
-                                        </Box>
+                                        </Box> 
                                     );
                                 })()}
                             </Box>
@@ -177,7 +183,7 @@ export default function ServiceOrderData() {
                             {!finalStatuses(order.status) && (
                                 <Box 
                                     className='order-button'>
-                                    <Typography variant="body2" className='secondary-title'>{statusConfirmMenssage}</Typography>
+                                    <Typography variant="body2" className='secondary-title'>{typeOrderMenssage(order)}</Typography>
                                     <Tooltip title="Click to new client" className='button'>
                                         <IconButton onClick={() => acceptOrder(order)}>
                                             <Add/>
