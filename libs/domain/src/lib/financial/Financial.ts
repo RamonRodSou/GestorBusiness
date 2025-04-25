@@ -38,3 +38,34 @@ export class Financial {
         };
     }
 }
+
+export class FinancialSummary {
+    constructor(
+        public readonly id: string = uuidv4(),
+        public income: number = 0,
+        public expense: number = 0,
+        public createdAt: string = new Date().toISOString()
+    ) { }
+
+    get balance(): number {
+        return this.income - this.expense;
+    }
+
+    static fromJson(json: any): FinancialSummary {
+        return new FinancialSummary(
+            json.id,
+            json.income,
+            json.expense,
+            json.createdAt
+        );
+    }
+
+    toJSON(): object {
+        return {
+            id: this.id,
+            income: this.income,
+            expense: this.expense,
+            createdAt: this.createdAt,
+        };
+    }
+}

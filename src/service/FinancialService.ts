@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import { Financial } from "@domain/financial";
+import { Financial, FinancialSummary } from "@domain/financial";
 import { auth, db } from "./firebase";
 
 export async function financialAdd(financial: Financial) {
@@ -14,7 +14,22 @@ export async function financialAdd(financial: Financial) {
             expense: financial.expense,
             createdAt: financial.createdAt,
         });
-        alert('Registro financeiro salvo com sucesso!');
+    } catch (error) {
+        alert('Erro ao registrar financeiro: ' + error);
+        throw error;
+    }
+}
+
+export async function financialSummaryAdd(financial: FinancialSummary) {
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("Usuário não autenticado.");
+        await addDoc(collection(db, 'financials'), {
+            userId: user.uid,
+            income: financial.income,
+            expense: financial.expense,
+            createdAt: financial.createdAt,
+        });
     } catch (error) {
         alert('Erro ao registrar financeiro: ' + error);
         throw error;

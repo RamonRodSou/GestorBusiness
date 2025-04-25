@@ -8,31 +8,43 @@ import {
   Divider,
   Container
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Financial } from '@domain/financial';
-import { findAllFinancials } from '@service/FinancialService';
+import { Financial, FinancialSummary } from '@domain/financial';
+import { financialSummaryAdd, findAllFinancials } from '@service/FinancialService';
+import FinancialModal from './financial-modal/FinancialModal';
 
 export default function FinancialData() {
     const [records, setRecords] = useState<Financial[]>([]);
     const [balance, setBalance] = useState(0);
-    const navigate = useNavigate(); 
-    const { userId } = useParams();
+    const [openModal, setOpenModal] = useState<boolean>(false);
 
     const isColorRed = balance >= 0 ? '#e8f5e9' : '#ffebee';
     
     function newFinancial() {
-        return navigate(`/dashboard/${userId}/add-financial`);
+        return setOpenModal(true);
+    }
+
+    async function handleConfirmFinancial(income: number, expense: number) {
+        const newFinancial = new FinancialSummary(
+            undefined,
+            income,
+            expense
+        );
+    
+        await financialSummaryAdd(newFinancial);
+        await load();
+        setOpenModal(false);
+    }
+
+    async function load() {
+        const data = await findAllFinancials();
+        setRecords(data);
+        const total = data.reduce((sum, item) => sum + (item.income - item.expense), 0);
+        setBalance(total);
     }
  
     useEffect(() => {
-        async function load() {
-          const data = await findAllFinancials();
-          setRecords(data);
-          const total = data.reduce((sum, item) => sum + (item.income - item.expense), 0);
-          setBalance(total);
-        }
         load();
-    }, []);
+    }, []); 
 
     return (
         <Container className='finacial-container'>
@@ -48,6 +60,13 @@ export default function FinancialData() {
                     R$ {balance.toFixed(2)}
                 </Typography>
             </Paper>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={() =>newFinancial()}
+            >
+                Nova Movimentação
+            </Button>
             <Box className='service-order'>
                 {records.map((item) => (
                     <Paper
@@ -56,9 +75,8 @@ export default function FinancialData() {
                         className='order-card'
                     >
                         <Typography variant="subtitle2" className='title-secondary'>
-                            Ordem de Serviço
+                            Ordem de Serviço: {item.serviceOrder?.orderNumber ?? 'Movimentação Manual'}
                         </Typography>
-                        <Typography variant="body1" className='title-secondary'>{item.serviceOrder?.orderNumber}</Typography>
 
                         <Divider sx={{ my: 1 }} />
 
@@ -67,20 +85,21 @@ export default function FinancialData() {
                         <Typography variant="body2" fontWeight="bold">
                             Saldo: R$ {(item.income - item.expense).toFixed(2)}
                         </Typography>
-                        <Typography variant="body2">Colaborador: {item.collaborator?.name}</Typography>
+                        <Typography variant="body2">Colaborador: {item.collaborator?.name ?? 'Gerente'}</Typography>
                         <Typography variant="caption" display="block" mt={1}>
                             Criado em: {new Date(item.createdAt).toLocaleDateString()}
                         </Typography>
                     </Paper>
                 ))}
             </Box>
-            <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={() =>newFinancial()}
-            >
-                Nova Movimentação
-            </Button>
+            <FinancialModal
+                title='Nova movimentação'
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onConfirm={handleConfirmFinancial}
+                incomeDefault={0}
+            />
       </Container>
+      
     );
 }
