@@ -20,6 +20,7 @@ import { ManagerContext } from '@context/ManagerContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Search from '@components/search/Search';
 import ClientDataModal from './client-data-modal/ClientDataModa';
+import SnackBarMessage from '@components/snackBarMessage/SnackBarMessage';
 
 export default function ClientData() {
     const [data, setData] = useState<Client[]>([]);
@@ -27,7 +28,7 @@ export default function ClientData() {
     const [openData, setOpenData] = useState(false);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
     const { userId } = useParams();
-    const { isMobile } = useContext(ManagerContext);
+    const { isMobile, openSnackbar, setOpenSnackbar } = useContext(ManagerContext);
     const navigate = useNavigate();
     
     function handleOpenDetails(client: Client) {
@@ -107,6 +108,11 @@ export default function ClientData() {
                 open={openData}
                 onClose={() => setOpenData(false)}
                 client={selectedClient}
+            />
+            <SnackBarMessage 
+                message={"Cliente criado com sucesso!"} 
+                openSnackbar={openSnackbar} 
+                setOpenSnackbar={setOpenSnackbar}
             />
         </Container>
 

@@ -1,15 +1,21 @@
 import './client-details.scss';
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { Client } from "@domain/user/client/Client";
-import { clientAdd } from '@service/UserService';
+import { clientAdd, updateClient, findByClientId } from '@service/UserService';
 import BackButton from '@components/back-button/BackButton';
-import SnackBarMessage from '@components/snackBarMessage/SnackBarMessage';
 import { EMPTY } from '@utils/string-utils';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ManagerContext } from '@context/ManagerContext';
 
 export default function ClientDetails() {
+    const { clientId, userId } = useParams();
+    const navigate = useNavigate();
+    const { setOpenSnackbar } = useContext(ManagerContext);
     const [data, setData] = useState<Client>(new Client());
-    const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
+    const isEditOrNew = isEditing ? `Editar Cliente: ${data.name}` : 'Novo Cliente'
 
     const handleChange = (field: keyof Client, value: string | number) => {
         setData(prev => {
@@ -20,17 +26,34 @@ export default function ClientDetails() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await clientAdd(data);
-        setData(new Client());
+        if (isEditing) {
+            await updateClient(data.id, data.toJSON());
+        } else {
+            await clientAdd(data); 
+            setData(new Client());
+        }
+
+        navigate(`/dashboard/${userId}/clients`);
         setOpenSnackbar(true);
     };
+
+    useEffect(() => {
+        async function loadClient() {
+            if (clientId) {
+                const clientData = await findByClientId(clientId);
+                setData(Client.fromJson(clientData));
+                setIsEditing(true);
+            }
+        }
+        loadClient();
+    }, [clientId]);
 
     return (
         <>
             <BackButton path={'clients'}/>
             <Container className='details-container'>
                 <form onSubmit={handleSubmit} className="details-form">
-                    <h2>Novo Cliente</h2>
+                    <h2>{isEditOrNew}</h2>
                     <Box mb={2}>
                         <TextField
                             label="Nome"
@@ -118,11 +141,6 @@ export default function ClientDetails() {
                         Salvar Cliente
                     </Button>
                 </form>
-                <SnackBarMessage 
-                    message={"Cliente criado com sucesso!"} 
-                    openSnackbar={openSnackbar} 
-                    setOpenSnackbar={setOpenSnackbar}
-                />
             </Container>
         </>
     );

@@ -5,8 +5,14 @@
     --primary-hover: #0e5092;
     --primary-active: #0b2a48;
 
+    --secondary-background: rgb(215, 123, 57);
+    --secondary-background-hover: rgb(114, 74, 44);
+    --secondary-background-active: rgb(179, 125, 25);
+
     --secondary-title: rgb(0, 58, 120);
     --secondary-active: #006c1d;
+
+
 
     --cancel-color: rgb(199, 94, 18);
 

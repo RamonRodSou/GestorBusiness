@@ -1,5 +1,19 @@
 :root {
-    .dialog {
-        padding: 2rem;
+    .title-and-editBtn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .editBtn {
+            background-color: var(--secondary-background);
+            color: var(--primary-color);
+
+            &:hover {
+                background-color: var(--secondary-background-hover);
+            }
+            &:active {
+                background-color: var(--secondary-background-active);
+            }
+        }
     }
 }

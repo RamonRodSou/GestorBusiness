@@ -25,6 +25,7 @@ function AppRouter() {
                     <Route path="collaborator" element={<CollaboratorData/>}/>
                     <Route path="new-collaborator" element={<CollaboratorDetails/>}/>
                     <Route path="new-client" element={<ClientDetails/>}/>
+                    <Route path="/dashboard/:userId/edit-client/:clientId" element={<ClientDetails/>} />
                     <Route path="financial" element={<FinancialData/>}/>
                     <Route path="service-order" element={<ServiceOrderData/>}/>
                     <Route path="add-service" element={<ServiceOrderDetails/>}/>
