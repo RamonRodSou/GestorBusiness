@@ -14,7 +14,8 @@ import FinancialModal from './financial-modal/FinancialModal';
 
 export default function FinancialData() {
     const [records, setRecords] = useState<Financial[]>([]);
-    const [balance, setBalance] = useState(0);
+    const [balance, setBalance] = useState<number>(0);
+    const [expense, setExpense] = useState<number>(0);
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     const isColorRed = balance >= 0 ? '#e8f5e9' : '#ffebee';
@@ -36,10 +37,13 @@ export default function FinancialData() {
     }
 
     async function load() {
-        const data = await findAllFinancials();
+        const data: Financial[] = await findAllFinancials();
+        const currentProfit: number = data.reduce((sum, it) => sum + (it.income - it.expense), 0);
+        const spendingToDate = data.reduce((sum, item) => sum + item.expense, 0);
+
         setRecords(data);
-        const total = data.reduce((sum, item) => sum + (item.income - item.expense), 0);
-        setBalance(total);
+        setBalance(currentProfit);
+        setExpense(spendingToDate);
     }
  
     useEffect(() => {
@@ -58,6 +62,14 @@ export default function FinancialData() {
                 </Typography>
                 <Typography variant="h4" color={balance >= 0 ? 'green' : 'error'}>
                     R$ {balance.toFixed(2)}
+                </Typography>
+            </Paper>
+            <Paper elevation={3} sx={{ bgcolor: '#ffebee' }} className='currrent-cash'>
+                <Typography variant="h6">
+                    Gastos:
+                </Typography>
+                <Typography variant="h4" color={'error'}>
+                    R$ {expense.toFixed(2)}
                 </Typography>
             </Paper>
             <Button 
