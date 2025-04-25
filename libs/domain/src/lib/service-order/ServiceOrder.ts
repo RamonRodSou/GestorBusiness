@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { EMPTY } from '@utils/string-utils';
 import { Client, CollaboratorSummary } from '@domain/user';
-import { StatusOrder } from './Status-Order';
+import { StatusOrder } from './StatusOrder';
 
 export class ServiceOrder {
     public readonly id: string;
