@@ -11,6 +11,9 @@ interface managerContextType {
 
     openSnackbar: boolean;
     setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+
+    snackbarMessage: string;
+    setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ManagerContext = createContext<managerContextType>({
@@ -22,6 +25,9 @@ export const ManagerContext = createContext<managerContextType>({
 
     openSnackbar: false,
     setOpenSnackbar: () => { },
+
+    snackbarMessage: EMPTY,
+    setSnackbarMessage: () => { },
 })
 
 export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -30,7 +36,7 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [data, setData] = useState<string>(EMPTY);
     const [isMobile, setIsMobile] = useState<boolean>(matches);
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-
+    const [snackbarMessage, setSnackbarMessage] = useState<string>(EMPTY);
 
     useEffect(() => {
         setIsMobile(matches);
@@ -38,7 +44,7 @@ export const ManagerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     return (
         <ManagerContext.Provider value={{
-                data, setData, isMobile, setIsMobile, openSnackbar, setOpenSnackbar
+                data, setData, isMobile, setIsMobile, openSnackbar, setOpenSnackbar, snackbarMessage, setSnackbarMessage
             }}
         >
             {children}
