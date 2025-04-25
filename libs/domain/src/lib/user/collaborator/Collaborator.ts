@@ -16,7 +16,7 @@ export class Collaborator extends User{
 		public country: string = EMPTY,
         public createdAt: string = new Date().toISOString()
     ) {
-		super(id, name, phone, email, street, houserNumber, city, state, zipCode, country, createdAt);
+		super(id, name, email, phone, street, houserNumber, city, state, zipCode, country, createdAt);
       }
 
       

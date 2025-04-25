@@ -6,8 +6,8 @@ export class Client extends User {
 	constructor(
 		public readonly id: string = uuidv4(),
 		public name: string = EMPTY,
-		public phone: string = EMPTY,
 		public email: string = EMPTY,
+        public phone: string = EMPTY,
         public street: string = EMPTY,
 		public houserNumber: string = EMPTY,
 		public city: string = EMPTY,
@@ -16,7 +16,7 @@ export class Client extends User {
 		public country: string = EMPTY,
 		public createdAt: string = new Date().toISOString()
 	) {
-		super(id, name, phone, email, street, houserNumber, city, state, zipCode, country, createdAt);
+		super(id, name, email, phone, street, houserNumber, city, state, zipCode, country, createdAt);
 	}
 
 	static fromJson(json: any): Client {
@@ -24,7 +24,7 @@ export class Client extends User {
             json.id,
             json.name,
             json.email,
-            json.phone,
+            json.phone, 
             json.street,
             json.houserNumber,
             json.city,
