@@ -3,6 +3,9 @@
       "env": {
         "TS_NODE_PROJECT": "tsconfig.app.json"
       }
-    }
+    },
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
   }
   
