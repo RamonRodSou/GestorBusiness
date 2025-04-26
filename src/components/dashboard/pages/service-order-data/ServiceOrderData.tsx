@@ -246,7 +246,7 @@ export default function ServiceOrderData() {
                 open={openConfirmModal} 
                 onClose={() => setOpenConfirmModal(false)} 
                 onConfirm={() => cancelOrder()} 
-                message={`Tem certeza do canelamento da OS  Nº ${currentOrder?.orderNumber}`}
+                message={`Tem certeza do cancelamento da OS  Nº ${currentOrder?.orderNumber}`}
             />
             <FinancialModal
                 order={currentOrder}
