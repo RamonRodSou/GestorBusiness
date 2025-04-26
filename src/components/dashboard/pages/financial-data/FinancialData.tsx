@@ -11,12 +11,15 @@ import {
 import { Financial, FinancialSummary } from '@domain/financial';
 import { financialSummaryAdd, findAllFinancials } from '@service/FinancialService';
 import FinancialModal from './financial-modal/FinancialModal';
+import Search from '@components/search/Search';
 
 export default function FinancialData() {
     const [records, setRecords] = useState<Financial[]>([]);
     const [balance, setBalance] = useState<number>(0);
     const [expense, setExpense] = useState<number>(0);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [filtered, setFiltered] = useState<Financial[]>([]);
+    
 
     const isColorRed = balance >= 0 ? '#e8f5e9' : '#ffebee';
     
@@ -55,7 +58,6 @@ export default function FinancialData() {
             <Typography variant="h4" component="h1" className='title'>
                 Painel Financeiro
             </Typography>
-
             <Paper elevation={3} sx={{ bgcolor: isColorRed }} className='currrent-cash'>
                 <Typography variant="h6">
                     Saldo Atual:
@@ -72,6 +74,14 @@ export default function FinancialData() {
                     R$ {expense.toFixed(2)}
                 </Typography>
             </Paper>
+            <Search<Financial> 
+                data={records}
+                onFilter={setFiltered}
+                label={'Buscar uma movimentação'}
+                searchBy={(item, term) => 
+                    item?.collaborator?.name.toLowerCase().includes(term.toLowerCase()) ||
+                    item.serviceOrder?.orderNumber.toString().includes(term)}                 
+            />
             <Button 
                 variant="contained" 
                 color="primary" 
@@ -80,7 +90,7 @@ export default function FinancialData() {
                 Nova Movimentação
             </Button>
             <Box className='service-order'>
-                {records.map((item) => (
+                {filtered.map((item) => (
                     <Paper
                         key={item.id}
                         elevation={2}

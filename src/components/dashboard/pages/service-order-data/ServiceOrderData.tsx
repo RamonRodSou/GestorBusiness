@@ -14,12 +14,14 @@ import { Client } from '@domain/user';
 import SnackBarMessage from '@components/snackBarMessage/SnackBarMessage';
 import { ManagerContext } from '@context/ManagerContext';
 import ConfirmModal from '@components/confirm-modal/ConfirmModal';
+import Search from '@components/search/Search';
 
 export default function ServiceOrderData() {
     const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);
     const [selectedStatus, setSelectedStatus] = useState<string>(StatusOrder.PENDING.status);
-    const [currentOrder, setCurrentOrder] = useState<ServiceOrder | null>(null);
-    const [_, setIncome] = useState<number>(0);
+    const [filtered, setFiltered] = useState<ServiceOrder[]>([]);
+    const [currentOrder, setCurrentOrder] = useState<ServiceOrder>();
+    const [_, setIncome] = useState<number>(0); 
     const [__, setExpense] = useState<number>(0);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
@@ -78,7 +80,6 @@ export default function ServiceOrderData() {
     
         setServiceOrders(prev => prev.filter(o => o.id !== currentOrder.id));
         setOpenModal(false);
-        setCurrentOrder(null);
     }
 
     async function acceptOrder(order: ServiceOrder): Promise<void> {
@@ -162,10 +163,20 @@ export default function ServiceOrderData() {
                 })}
             </Box>
             <div className='container-order'>
-                {serviceOrders.length === 0 ? (
+                <Search<ServiceOrder> 
+                    data={serviceOrders}
+                    onFilter={setFiltered}
+                    label={'Buscar uma Ordem de Serviço'}
+                    searchBy={(item, term) => 
+                        item.client.phone.toLowerCase().includes(term.toLowerCase()) ||
+                        item.orderNumber.toString().includes(term)}                 
+                />
+
+                {filtered.length === 0 ? (
                     <Typography variant="body1" className='title-secondary'>Nenhuma ordem de serviço pendente.</Typography>
                 ) : (
-                    serviceOrders.map(order => (
+                    filtered.map(order => (
+                        
                         <Paper key={order.id} className='paper-order' elevation={3}>
                             <Box className='status-order'>
                                 <span>
@@ -237,15 +248,13 @@ export default function ServiceOrderData() {
                 onConfirm={() => cancelOrder()} 
                 message={`Tem certeza do canelamento da OS  Nº ${currentOrder?.orderNumber}`}
             />
-            {serviceOrders.map(order => (
-                <FinancialModal
-                    order={order}
-                    open={openModal}
-                    onClose={() => setOpenModal(false)}
-                    onConfirm={completeServiceOrder}
-                    incomeDefault={currentOrder?.serviceValue ?? 0}
-                />                
-            ))}
+            <FinancialModal
+                order={currentOrder}
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                onConfirm={completeServiceOrder}
+                incomeDefault={currentOrder?.serviceValue ?? 0}
+            />                
         </>
     );
 }

@@ -1,5 +1,6 @@
 import { Add } from "@mui/icons-material";
 import {
+    Box,
   Container,
   IconButton,
   Paper,
@@ -39,7 +40,20 @@ export default function CollaboratorData() {
 
     return (
         <Container className='data-container'>
-            <Search<Collaborator> data={data} onFilter={setFiltered} />
+            <Box mb={3}>
+                <Typography variant="h4" component="h1" className='title'>
+                    Colaboradores
+                </Typography>
+            </Box>
+            <Search<Collaborator> 
+                data={data} 
+                onFilter={setFiltered} 
+                label={'Buscar Colaborador'}
+                searchBy={(item, term) =>
+                    item.name.toLowerCase().includes(term.toLowerCase()) ||
+                    item.phone.includes(term)
+                }
+            />
 
             {filtered?.length > 0 ? (
                     <TableContainer component={Paper}>

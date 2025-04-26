@@ -11,7 +11,8 @@ import {
     TableContainer, 
     TableHead, 
     TableRow, 
-    Paper
+    Paper,
+    Box
 } from "@mui/material";
 import { useContext, useEffect, useState } from 'react';
 import { Client } from '@domain/user/client/Client';
@@ -51,7 +52,20 @@ export default function ClientData() {
 
     return (
         <Container className="data-container">
-            <Search<Client> data={data} onFilter={setFiltered} />
+            <Box mb={3}>
+                <Typography variant="h4" component="h1" className='title'>
+                    Clientes
+                </Typography>
+            </Box>
+            <Search<Client> 
+                data={data} 
+                onFilter={setFiltered} 
+                label={'Buscar Cliente'}
+                searchBy={(item, term) =>
+                    item.name.toLowerCase().includes(term.toLowerCase()) ||
+                    item.phone.includes(term)
+                }
+            />
             {filtered?.length > 0 ? (
                 <TableContainer component={Paper}>
                 <Table size="small">
