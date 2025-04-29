@@ -97,7 +97,7 @@ export default function FinancialData() {
                         className='order-card'
                     >
                         <Typography variant="subtitle2" className='title-secondary'>
-                            Ordem de Serviço: {item.serviceOrder?.orderNumber ?? 'Movimentação Manual'}
+                            Faturamento OS - {item.serviceOrder?.orderNumber ?? 'Movimentação Manual'}
                         </Typography>
 
                         <Divider sx={{ my: 1 }} />
