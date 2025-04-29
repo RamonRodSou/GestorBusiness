@@ -92,7 +92,7 @@ export default function ClientData() {
                         {!isMobile && (
                             <>
                             <TableCell className='data-text'>{it.street}</TableCell>
-                            <TableCell className='data-text'>{it.houserNumber}</TableCell>
+                            <TableCell className='data-text'>{it.houseNumber}</TableCell>
                             <TableCell className='data-text'>{it.city}</TableCell>
                             <TableCell className='data-text'>{it.state}</TableCell>
                             <TableCell className='data-text'>{it.zipCode}</TableCell>

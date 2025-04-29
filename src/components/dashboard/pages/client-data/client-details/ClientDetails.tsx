@@ -95,8 +95,8 @@ export default function ClientDetails() {
                         <TextField
                             label="Número"
                             type="number"
-                            value={data.houserNumber ?? EMPTY}
-                            onChange={(e) => handleChange("houserNumber", Number(e.target.value))}
+                            value={data.houseNumber ?? EMPTY}
+                            onChange={(e) => handleChange("houseNumber", Number(e.target.value))}
                             fullWidth
                             required
                         />

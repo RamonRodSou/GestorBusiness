@@ -31,7 +31,7 @@ export default function ClientDataModal({ open, onClose, client }: ClientDataMod
                 </Box>
                 <Typography>Telefone: {client.phone}</Typography>
                 <Typography>Rua: {client.street}</Typography>
-                <Typography>Número: {client.houserNumber}</Typography>
+                <Typography>Número: {client.houseNumber}</Typography>
                 <Typography>Cidade: {client.city}</Typography>
                 <Typography>Estado: {client.state}</Typography>
                 <Typography>CEP: {client.zipCode}</Typography>

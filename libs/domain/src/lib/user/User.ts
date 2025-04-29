@@ -8,7 +8,7 @@ export abstract class User {
 		public phone: string = EMPTY,
 		public email: string = EMPTY,
     	public street: string = EMPTY,
-		public houserNumber: string = EMPTY,
+		public houseNumber: string = EMPTY,
 		public city: string = EMPTY,
 		public state: string = EMPTY,
 		public zipCode: string = EMPTY,

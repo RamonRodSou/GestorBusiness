@@ -9,14 +9,14 @@ export class Collaborator extends User{
         public email: string = EMPTY,
         public phone: string = EMPTY,
         public street: string = EMPTY,
-		public houserNumber: string = EMPTY,
+		public houseNumber: string = EMPTY,
 		public city: string = EMPTY,
 		public state: string = EMPTY,
 		public zipCode: string = EMPTY,
 		public country: string = EMPTY,
         public createdAt: string = new Date().toISOString()
     ) {
-		super(id, name, email, phone, street, houserNumber, city, state, zipCode, country, createdAt);
+		super(id, name, email, phone, street, houseNumber, city, state, zipCode, country, createdAt);
       }
 
       
@@ -27,7 +27,7 @@ export class Collaborator extends User{
             json.email,
             json.phone,
             json.street,
-            json.houserNumber,
+            json.houseNumber,
             json.city,
             json.state,
             json.zipCode,
@@ -43,7 +43,7 @@ export class Collaborator extends User{
             email: this.email,
             phone: this.phone,
             street: this.street,
-            houserNumber: this.houserNumber,
+            houseNumber: this.houseNumber,
             city: this.city,
             state: this.state,
             zipCode: this.zipCode,

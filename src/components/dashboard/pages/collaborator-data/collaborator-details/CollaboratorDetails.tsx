@@ -71,8 +71,8 @@ export default function CollaboratorDetails() {
                         <TextField
                             label="Número"
                             type="number"
-                            value={collaborator.houserNumber ?? EMPTY}
-                            onChange={(e) => handleChange("houserNumber", Number(e.target.value))}
+                            value={collaborator.houseNumber ?? EMPTY}
+                            onChange={(e) => handleChange("houseNumber", Number(e.target.value))}
                             fullWidth
                             required
                         />

@@ -216,7 +216,7 @@ export default function ServiceOrderData() {
                             <Typography variant="body2">Cliente: {order.client.name}</Typography>
                             <Typography variant="body2">Telefone: {order.client.phone}</Typography>
                             <Typography variant="body2">Rua: {order.client.street}</Typography>
-                            <Typography variant="body2">Número: {order.client.houserNumber}</Typography>
+                            <Typography variant="body2">Número: {order.client.houseNumber}</Typography>
                             <Typography variant="body2">Cidade: {order.client.city}</Typography>
                             <Typography variant="body2">Estado: {order.client.state}</Typography>
 

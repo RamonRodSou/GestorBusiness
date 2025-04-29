@@ -13,7 +13,7 @@ export async function clientAdd(client: Client) {
             phone: client.phone,
             email: client.email,
             street: client.street,
-            houserNumber: client.houserNumber,
+            houseNumber: client.houseNumber,
             city: client.city,
             state: client.state,
             zipCode: client.zipCode,
